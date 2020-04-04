@@ -35,19 +35,21 @@ AlgumaCoisa* pAC; // "pAC" é um  ponteiro que aponta para um objeto de tipo Alg
 // abaixo um exemplo correcto, mas com incoerencia de sintaxe
 int (*pArr)[3];      // ponteiro que aponta para um array de tres elementos
 ```
-Baseando-se na sintaxe do **pi**, **pC** e **pAC** podemos deduzir intuitivamenre a sintaxe para definiçao de qualquer tipo de ponteiro como a seguinte :
+Baseando-se na sintaxe do **pi**, **pC** e **pAC** podemos deduzir intuitivamente a sintaxe para definir qualquer tipo de ponteiro como o seguinte padrão( pattern) :
 
 **tipo * nomeDaVarivel ;**
 
-Mas estarias errado se seguisses essa intuiçao para definir **um ponteiro que aponta para num array*. Intuitivamente seria :
+Mas estarias errado se seguisses essa intuiçao/padrão para definir **um ponteiro que aponta para num array**. Tentando imititar O padrão a cima, intuitivamente definiriamos um **ponteiro que aponta para um uma variável de tipo array/vector** da seguinte forma :
 ```c++
 /* 
-definiaçao correcta, mas nao um ponteiro que aponta para um array
+definiaçao correcta, mas não um ponteiro que aponta para um array
 Intuiçao para definir um ponteiro que aponta para um array
 */
-int* pArr[2]; // "pArr" é um array/lista que pode conter dois elementos de tipo ponteiros que apontam para inteiros
+int* pArr[2]; // "pArr" é um array/lista que pode conter dois elementos de tipo ponteiros que apontam para variaveis de tipo inteiros
 // ou uma outra sintaxe que conseguires deduzir intuitivamente 
 ```
+Como ja disse a cima e repito estariamos errados se seguissemos essa lógica neste caso. 
+
 Lamento dizer-te isto mas C++ não é sobre intuição, mas sim a cerca de conhecer ela intimamente e ceder a suas grandezas.
 Esta é uma das armadilhas e incoerências nas sintaxes do C++ que tornam a compreensão da linguagem um pouco complexa e difícil de masterizar.
 
