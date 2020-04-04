@@ -39,7 +39,7 @@ Baseando-se na sintaxe do **pi**, **pC** e **pAC** podemos deduzir intuitivament
 
 **tipo * nomeDaVarivel ;**
 
-Mas estarias errado se seguisses essa intuiçao/padrão para definir **um ponteiro que aponta para um array**. Tentando imititar O padrão a cima, intuitivamente definiriamos um **ponteiro que aponta para um uma variável de tipo array/vector** da seguinte forma :
+Mas estarias errado se seguisses essa intuiçao/padrão para definir **um ponteiro que aponta para um array**. Tentando imititar O padrão a cima, intuitivamente definiriamos um **ponteiro que aponta para uma variável de tipo array** da seguinte forma :
 ```c++
 /* 
 definiaçao correcta, mas não um ponteiro que aponta para um array
