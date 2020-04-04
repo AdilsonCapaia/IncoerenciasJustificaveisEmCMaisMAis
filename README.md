@@ -21,6 +21,7 @@ Comportamento e semântica, como programadores não podemos alterar muita coisa,
 Como programador, tentando masterizar o C++, encontrei e provavelmente continuarei a encontrar alguns conceitos/sintaxes do C++ um pouco incoerentes e um pouco difícil de absorver. Uma dessas incoerências podem ser vistas no momento de declaração/definição de :
 - Ponteiros que apontam para **arrays**
 - Ponteiros que apontam para **funções**
+
 Ponteiros que apontam para tipos primitivos ( int, double, char, etc ...) e objetos (class, struct) são fáceis de absorver porque suas declarações/definições são uniformes como por exemplo
 
 ```c++
@@ -34,8 +35,10 @@ AlgumaCoisa* pAC; // "pAC" é um  ponteiro que aponta para um objeto de tipo Alg
 // abaixo um exemplo correcto, mas com incoerencia de sintaxe
 int (*pArr)[3];      // ponteiro que aponta para um array de tres elementos
 ```
-Baseando-se na sintaxe do pi, pC e pAC podemos deduzir intuitivamenre a sintaxe para definiçao de qualquer tipo de ponteiro como a seguinte :
+Baseando-se na sintaxe do **pi**, **pC** e **pAC** podemos deduzir intuitivamenre a sintaxe para definiçao de qualquer tipo de ponteiro como a seguinte :
+
 **tipo * nomeDaVarivel ;**
+
 Mas estarias errado se seguisses essa intuiçao para definir um ponteiro que aponta para num array, intuitivamente seria :
 ```c++
 int* pArr[]; 
