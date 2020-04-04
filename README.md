@@ -3,7 +3,7 @@ Reflexões sobre algumas Incoerências e armadilhas em C++, e tentativas de clar
 
 # Índice
   - Problemáticas
-  - 1 Incoerências entre declaraões/definições de ponteiros que apontam para *arrays e funções*
+  - [1 Incoerências entre declaraões/definições de ponteiros que apontam para *arrays e funções*](#IDAF)
     -   1.1 Breve Introdução de Ponteiros
            - 1.1.1 Declarações de Ponteiros normais, e ponteiros que apontam para arrays
            - 1.1.2 Declarações de funçoes que retornam arrays ??? 
