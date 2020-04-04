@@ -39,9 +39,13 @@ Baseando-se na sintaxe do **pi**, **pC** e **pAC** podemos deduzir intuitivamenr
 
 **tipo * nomeDaVarivel ;**
 
-Mas estarias errado se seguisses essa intuiçao para definir um ponteiro que aponta para num array, intuitivamente seria :
+Mas estarias errado se seguisses essa intuiçao para definir **um ponteiro que aponta para num array*. Intuitivamente seria :
 ```c++
-int* pArr[]; 
+/* 
+definiaçao correcta, mas nao um ponteiro que aponta para um array
+Intuiçao para definir um ponteiro que aponta para um array
+*/
+int* pArr[2]; // "pArr" é um array/lista que pode conter dois elementos de tipo ponteiros que apontam para inteiros
 // ou uma outra sintaxe que conseguires deduzir intuitivamente 
 ```
 Lamento dizer-te isto mas C++ não é sobre intuição, mas sim a cerca de conhecer ela intimamente e ceder a suas grandezas.
