@@ -95,4 +95,4 @@ Para modificar ou recuperar o valor da variável que o ponteiro aponta devemos d
 ```c++
 cout<<pi<<endl; // imprimi o endereço da variavel "numero"
 ```
-Dai a obrigatoriadade de utilizar o asterisco **( * )** para modificar ou recuperar o valor da variavel na qual o ponteiro aponta ( *p )* , e utilizar o nome do ponteiro sozinho quando queremos afectar-lhe o endereço de uma variável ( *pi = &numero)*. Voilà.
+Dai a obrigatoriadade de utilizar o asterisco **( * )** para modificar ou recuperar o valor da variavel na qual o ponteiro aponta **( \*p )** , e utilizar o nome do ponteiro sozinho quando queremos afectar-lhe o endereço de uma variável **( \*pi = &numero)**. Voilà.
