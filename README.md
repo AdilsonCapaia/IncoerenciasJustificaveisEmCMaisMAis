@@ -58,11 +58,11 @@ Este Artigo/projecto serve para abordar e facilitar a compreensão destas incoer
 
 # <a name="TS"></a> Termos e Significões
 
-| Tables        | Are           | Cool  |
-| ------------- |:-------------:| -----:|
-| col 3 is      | right-aligned | $1600 |
-| col 2 is      | centered      |   $12 |
-| zebra stripes | are neat      |    $1 |
+| Termo         | Exemplo       | Outros Significados  |
+| ------------- |:-------------:| :-----|
+| array         | int aLista[]; | lista, vector |
+| variavel      | int numero;   | *numero* é nome de uma variável, ou bjeto |
+| objeto        | Coisa co;     | *co* é um objeto ou instancia, ou ainda nome de uma variavél |
 
 # <a name="IDAF"></a> 1 Incoerências entre declaraões/definições de ponteiros que apontam para *arrays e funções*
 
