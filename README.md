@@ -7,10 +7,10 @@ Reflexões sobre algumas Incoerências e armadilhas em C++, e tentativas de clar
   - ## [1 Incoerências entre declaraões/definições de ponteiros que apontam para *arrays e funções*](#IDAF)
     -   ### [1.1 Breve Introdução de Ponteiros](#BIP)
            - #### [1.1.1 Declarações de Ponteiros normais](#DPN)
-    -   ### [1.2 Breve Introdução a funções(#BIF) 
+    -   ### [1.2 Breve Introdução a funções](#BIF) 
            - #### [1.2.1 Declarações de Funções normais](#DFN)
            - #### [1.2.2 Declarações de Funções com parâmetros normais e/ou com  parâmetros de tipo array ???](#DF-PN-PA)
-           Declarações de funçoes que retornam arrays ???
+           - ###  [1.2.3 Declarações de funçoes que retornam arrays ???](#DF-RA)
     -   ### [1.3 Ponteiros que apontam a arrays](#PAA)
            - #### 1.3.1 Incoerência ou  Interpretação intuitiva precipitada ?
            - #### 1.3.1 Forma certa, Justificação/Entendimento do compilador
