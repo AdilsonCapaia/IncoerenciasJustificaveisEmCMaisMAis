@@ -78,7 +78,7 @@ Ponteiros são construct ou tipos de objectos que aponta para o endereço de mem
 Ja sabemos as necessidades de um ponteiro, mas, como definir e utilizar um ponteiro normal ? A sintaxe para declarar um ponteiro normal é a seguinte *tipo** *nomeDoPonteiro = &nomeDavarievelparaApontar;*
 ```c++
   int numero = 10; 
-  int* pi; // delcarao de um ponteiro que aponta para uma variavel de tipo int
+  int* pi; // declaracao de um ponteiro que aponta para uma variavel de tipo int
   pi = &numero; // "pi" agora aponta para a varivel "numero", ou para o endereço da varivel "numero"
 ```
 Uma vez definido o ponteiro, e ter lhe dado o endereço de uma variável, dai para frente podemos utilizar este ponteiro ( *pi* ) como se fosse a nossa variável  ( *numero* ) das seguintes maneiras...
