@@ -2,7 +2,7 @@
 Reflexões sobre algumas Incoerências e armadilhas em C++, e tentativas de clarifica-las ou justifica-las
 
 ## Índice
-  - ## [Termos e Significões](#TS)
+  - ## [Termos e Significações](#TS)
   - ## [Problemáticas](#P)
   - ## [1 Incoerências entre declaraões/definições de ponteiros que apontam para *arrays e funções*](#IDAF)
     -   ### [1.1 Breve Introdução de Ponteiros](#BIP)
@@ -56,7 +56,7 @@ Esta é uma das armadilhas e incoerências nas sintaxes do C++ que tornam a comp
 
 Este Artigo/projecto serve para abordar e facilitar a compreensão destas incoerências tentando denuncia-las e ao mesmo tempo justifica-las ou propondo sintaxes mais simples. Neste artigo tentarei fazer-te entender a maior parte das sintaxes obscuras do C++ com teoria e exemplos práticos.
 
-# <a name="TS"></a> Termos e Significões
+# <a name="TS"></a> Termos e Significações
 
 | Termo         | Exemplo       | Outros Significados  |
 | ------------- |:-------------:| :-----|
