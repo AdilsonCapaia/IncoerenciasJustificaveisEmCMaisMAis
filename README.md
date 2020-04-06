@@ -91,11 +91,13 @@ Uma vez definido o ponteiro, e ter lhe dado o endereço de uma variável, dai pa
    cout<<numero<<endl; // "numero" e igual a 20
    cout<<*pi<<endl; // "*pi" é igual a 20
 ```
-Para modificar ou recuperar o valor da variável que o ponteiro aponta devemos desreferenciar o ponteiro com o asterisco **( * )**. Chama-se desreferenciar porque o ponteiro aponta para o endereço da variável. E se utilizamos o ponteiro da maneira a baixo, imprimirá o endereço da variável que o ponteiro aponta
+Para modificar ou recuperar o valor da variável que o ponteiro aponta devemos desreferenciar o ponteiro com o asterisco 
+**( * )**. Chama-se desreferenciar porque o ponteiro aponta para o endereço da variável. E se utilizamos o ponteiro da maneira a baixo, imprimirá o endereço da variável que o ponteiro aponta
 ```c++
 cout<<pi<<endl; // imprimi o endereço da variavel "numero"
 ```
-Dai a obrigatoriadade de utilizar o asterisco **( * )** para modificar ou recuperar o valor da variavel na qual o ponteiro aponta **( \*p )** , e utilizar o nome do ponteiro sozinho quando queremos afectar-lhe o endereço de uma variável **( pi = &numero)**. Voilà.
+Dai a obrigatoriadade de utilizar o asterisco **( * )** para modificar ou recuperar o valor da variavel na qual o ponteiro aponta **( \*p )** , e utilizar o nome do ponteiro sozinho quando queremos afectar-lhe o endereço de uma variável 
+**( pi = &numero)**. Voilà.
 
 ## <a name="BIF"></a> 1.2 Breve Introdução a funções  
 Funções são estruturas que nos possibilitam reagrupar uma sequência lógica de instruções que podem ser executadas repetidas vezes com a mesma sequência lógica.
@@ -106,14 +108,15 @@ Aqui vão varias formas de definir uma função
 
 ```c++
 
-// funçao que nao retorna nada, e nao recebe nenhum parametro
-void nada(){ // instruçoes vao aqui }
+  // funçao que nao retorna nada, e nao recebe nenhum parametro
+  void nada(){ // instruçoes vao aqui }
 
-// funçao que nao retorna nada, mas recebe um texto para imprimir na saida
-void imprime(string frase){  cout<<frase<<endl; }
+  // funçao que nao retorna nada, mas recebe um texto para imprimir na saida
+  void imprime(string frase){  cout<<frase<<endl; }
 
-// funçao que retorna  o valor de tipo inteiro, e recebe dois parametros de tipo inteiros
-int soma(int a, int b) { cout<< a + b <<endl; }
+  // funçao que retorna  o valor de tipo inteiro, e recebe dois parametros de tipo inteiros
+  int soma(int a, int b) { cout<< a + b <<endl; }
+  
 ```
 
 Com os exemplos que vimos em cima, da para deduzir que a sintaxe para definir qualquer tipo de função é a seguinte :
@@ -126,7 +129,51 @@ Com os exemplos que vimos em cima, da para deduzir que a sintaxe para definir qu
 
 Qualquer um pensaria assim intuitivamente, e não os culpo por isto. 
 
-Mais cometerias muitos erros em deduzir que esta sintaxe é suficiente  para definir qualquer tipo de função, por exemplo até  funções que retornam arrays, arrays multidimensionais. Ou funções que recebem arrays normais, ou arrays multidimensionais como parâmetros.  Ou mesmo ainda funções que recebem funções como parâmetros e/ou retornam funções. 
+Mais cometerias muitos erros em deduzir que esta sintaxe é suficiente  para definir qualquer tipo de função, por exemplo 
+até  funções que retornam arrays, arrays multidimensionais. Ou funções que recebem arrays normais, ou arrays multidimensionais como parâmetros.  Ou mesmo ainda funções que recebem funções como parâmetros e/ou retornam funções. 
 
 Lamento, mas quanto ao comportamento, C++, não é um jogo de adivinha nem de intuição. Tenha Cautela quando quiseres definir funções que retornam e/ou recebem aurgumentos de tipo arrays normais ou multidimensionais. Voltaremos a falar disso nas próximas seções para esclarecer as sintaxes incoerentes mais justificáveis. Também não precisas preocupar-se porque explicar esses problemas e o objectivo deste artigo.
+
+### <a name="DF-PN-PA"></a> 1.2.2 Declarações de Funções com parâmetros de tipo array/lista ???
+
+Funções podem receber argumentos, como vimos na secção anterior. Mas as vezes queremos passar argumentos um pouco mais complexos como lista de valores. É  bem possível fazer isto em C++, a sintaxe é quase a mesma que definir funçoes que 
+recebem parâmetros normais, mais o comportamento é  diferente. Aqui vai uma das sintaxe para definir funções que recebem array (lista) como argumentos :
+
+```c++
+   // função com parâmetro de tipo ponteiro, e que recebe um argumento de tipo ponteiro/array
+  void manipula(double* p){ // faz alguma coisa com o ponteiro}
+
+  // função com parâmetro de tipo lista, e que recebe um argumento de  tipo lista 
+  void computa(double li[]){ // faz alguma coisa com a lista}
+
+```
+Praticamente as duas funções definidas acima podem ser utilizada para o mesmo propósito. As duas podem receber um argumento do tipo array/lista. Você de estar a se perguntar como é possível ? Antes de responder esta questão  vamos ver um exemplo de como estas funções poderiam ser utilizadas 
+
+```c++
+  // definição de uma lista de números decimais, com quatro elementos
+  double lista[4] = {3.44 , 1.00 , 0.99 , 3.14}; 
+
+  // chamar a função para manipular os valores da lista
+  manipula(lista);
+
+  // chamar a função para computar os valores na lista
+  computa(lista);
+
+```
+Viu ? as duas funções foram definidas com parâmetros de tipos diferentes, mas foi possível passar-lhes argumento do mesmo tipo no nosso caso passamos uma lista.  Como isto é possível ?  Isto é possível porque na verdade em C++ não é possível copiar uma lista na outra( *lista1 = lista2*). E para resolver este problema o compilador converte qualquer tipo de lista 
+em ponteiro.  
+
+Você ainda deve estar a se perguntar, mas em que momento fazemos cópia de uma lista para outra ?  Quando chamamos as nossas funções nos exemplos acima, exactamente na função computa que tem um parâmetro de tipo lista. E quando chamamos a função e lhe passamos um argumento lista
+
+```c++
+  // chamar a função para computar os valores na lista
+  computa(lista);
+```
+Sabemos que em C++ tem dois tipos de passagem de parâmetros. Passagem por valor (copia) e passagem por referência. E por defeito passagem de parâmetros e por cópia. Então quando chamamos a nossa função *computa* e lhe passamos a variável 
+lista (* computa(lista)* o compilador pega na variável lista e tenta copiar na variável *li* (parâmetro da função *computa*. E neste momento onde o compilador detecta uma inconformidade, para resolver o problema, converte o argumento em ponteiro para que tudo corra bem.
+
+Como o compilador converte todos parâmetros de tipo array/lista em ponteiro, por isso é que a função manipula funciona 
+muito bem quando passamos a nossa variável lista, porque no fundo todos parâmetros de tipo lista são convertidos em ponteiros, e neste caso o compilador não precisa fazer operação adicional de conversão, por o parâmetro da função já é um ponteiro. 
+
+Aqui foi mais uma explicação das armadilhas do C++. Espero que tenhas entendido este conceito de conversão de lista em ponteiros. Porque voltaremos a falar dela nas próximas sessões.
 
