@@ -9,7 +9,7 @@ Reflexões sobre algumas Incoerências e armadilhas em C++, e tentativas de clar
            - #### [1.1.1 Declarações de Ponteiros normais](#DPN)
     -   ### [1.2 Breve Introdução a funções](#BIF) 
            - #### [1.2.1 Declarações de Funções normais](#DFN)
-           - #### [1.2.2 Declarações de Funções com parâmetros normais e/ou com  parâmetros de tipo array ???](#DF-PN-PA)
+           - #### [1.2.2 Declarações de Funções com parâmetros de tipo array ???](#DF-PN-PA)
            - ###  [1.2.3 Declarações de funçoes que retornam arrays ???](#DF-RA)
     -   ### [1.3 Ponteiros que apontam a arrays](#PAA)
            - #### 1.3.1 Incoerência ou  Interpretação intuitiva precipitada ?
@@ -96,3 +96,37 @@ Para modificar ou recuperar o valor da variável que o ponteiro aponta devemos d
 cout<<pi<<endl; // imprimi o endereço da variavel "numero"
 ```
 Dai a obrigatoriadade de utilizar o asterisco **( * )** para modificar ou recuperar o valor da variavel na qual o ponteiro aponta **( \*p )** , e utilizar o nome do ponteiro sozinho quando queremos afectar-lhe o endereço de uma variável **( pi = &numero)**. Voilà.
+
+## <a name="BIF"></a> 1.2 Breve Introdução a funções  
+Funções são estruturas que nos possibilitam reagrupar uma sequência lógica de instruções que podem ser executadas repetidas vezes com a mesma sequência lógica.
+Porqué precisamos de funções ? Precisamos de funções para manter os nossos programas organizados, legível,  e também para facilitar a manutenção dos nossos programas. 
+
+### <a name="DFN"></a> 1.2.1 Declarações de Funções normais
+Aqui vão varias formas de definir uma função 
+
+```c++
+
+// funçao que nao retorna nada, e nao recebe nenhum parametro
+void nada(){ // instruçoes vao aqui }
+
+// funçao que nao retorna nada, mas recebe um texto para imprimir na saida
+void imprime(string frase){  cout<<frase<<endl; }
+
+// funçao que retorna  o valor de tipo inteiro, e recebe dois parametros de tipo inteiros
+int soma(int a, int b) { cout<< a + b <<endl; }
+```
+
+Com os exemplos que vimos em cima, da para deduzir que a sintaxe para definir qualquer tipo de função é a seguinte :
+
+*tipoDeRetorno **nomeDaFunçao** (tipo nomeParemtro1,...) 
+{
+    //instruções vão aqui
+    return …;
+}*
+
+Qualquer um pensaria assim intuitivamente, e não os culpo por isto. 
+
+Mais cometerias muitos erros em deduzir que esta sintaxe é suficiente  para definir qualquer tipo de função, por exemplo até  funções que retornam arrays, arrays multidimensionais. Ou funções que recebem arrays normais, ou arrays multidimensionais como parâmetros.  Ou mesmo ainda funções que recebem funções como parâmetros e/ou retornam funções. 
+
+Lamento, mas quanto ao comportamento, C++, não é um jogo de adivinha nem de intuição. Tenha Cautela quando quiseres definir funções que retornam e/ou recebem aurgumentos de tipo arrays normais ou multidimensionais. Voltaremos a falar disso nas próximas seções para esclarecer as sintaxes incoerentes mais justificáveis. Também não precisas preocupar-se porque explicar esses problemas e o objectivo deste artigo.
+
