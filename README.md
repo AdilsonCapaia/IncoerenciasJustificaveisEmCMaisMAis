@@ -170,7 +170,7 @@ Você ainda deve estar a se perguntar, mas em que momento fazemos cópia de uma 
   computa(lista);
 ```
 Sabemos que em C++ tem dois tipos de passagem de parâmetros. Passagem por valor (copia) e passagem por referência. E por defeito passagem de parâmetros e por cópia. Então quando chamamos a nossa função *computa* e lhe passamos a variável 
-lista (* computa(lista)* o compilador pega na variável lista e tenta copiar na variável *li* (parâmetro da função *computa*. E neste momento onde o compilador detecta uma inconformidade, para resolver o problema, converte o argumento em ponteiro para que tudo corra bem.
+lista *computa(lista)* o compilador pega na variável lista e tenta copiar na variável *li* (parâmetro da função *computa*. E neste momento onde o compilador detecta uma inconformidade, para resolver o problema, converte o argumento em ponteiro para que tudo corra bem.
 
 Como o compilador converte todos parâmetros de tipo array/lista em ponteiro, por isso é que a função manipula funciona 
 muito bem quando passamos a nossa variável lista, porque no fundo todos parâmetros de tipo lista são convertidos em ponteiros, e neste caso o compilador não precisa fazer operação adicional de conversão, por o parâmetro da função já é um ponteiro. 
