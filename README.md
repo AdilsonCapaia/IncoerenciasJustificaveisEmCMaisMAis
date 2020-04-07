@@ -10,7 +10,7 @@ Reflexões sobre algumas Incoerências e armadilhas em C++, e tentativas de clar
     -   ### [1.2 Breve Introdução a funções](#BIF) 
            - #### [1.2.1 Declarações de Funções normais](#DFN)
            - #### [1.2.2 Declarações de Funções com parâmetros de tipo array ???](#DF-PN-PA)
-           - ###  [1.2.3 Declarações de funçoes que retornam arrays ???](#DF-RA)
+           - ####  [1.2.3 Declarações de funçoes que retornam arrays ???](#DF-RA)
     -   ### [1.3 Ponteiros que apontam a arrays](#PAA)
            - #### 1.3.1 Incoerência ou  Interpretação intuitiva precipitada ?
            - #### 1.3.1 Forma certa, Justificação/Entendimento do compilador
@@ -111,7 +111,7 @@ Funções são estruturas que nos possibilitam reagrupar uma sequência lógica 
 Porqué precisamos de funções ? Precisamos de funções para manter os nossos programas organizados, legível,  e também para facilitar a manutenção dos nossos programas. 
 
 ### <a name="DFN"></a> 1.2.1 Declarações de Funções normais
-Aqui vão varias formas de definir uma função 
+Aqui vão várias formas de definir uma função 
 
 ```c++
 
@@ -121,14 +121,14 @@ Aqui vão varias formas de definir uma função
   // funçao que nao retorna nada, mas recebe um texto para imprimir na saida
   void imprime(string frase){  cout<<frase<<endl; }
 
-  // funçao que retorna  o valor de tipo inteiro, e recebe dois parametros de tipo inteiros
+  // funçao que retorna  um valor de tipo inteiro, e recebe dois parametros de tipo inteiro
   int soma(int a, int b) { cout<< a + b <<endl; }
   
 ```
 
 Com os exemplos que vimos em cima, da para deduzir que a sintaxe para definir qualquer tipo de função é a seguinte :
 
-*tipoDeRetorno **nomeDaFunçao** (tipo nomeParemtro1,...) 
+*tipoDeRetorno **nomeDaFunçao** (tipoDeDado nomeParemtro1,...) 
 {
     //instruções vão aqui
     return …;
@@ -136,18 +136,16 @@ Com os exemplos que vimos em cima, da para deduzir que a sintaxe para definir qu
 
 Qualquer um pensaria assim intuitivamente, e não os culpo por isto. 
 
-Mais cometerias muitos erros em deduzir que esta sintaxe é suficiente  para definir qualquer tipo de função, por exemplo 
-até  funções que retornam arrays, arrays multidimensionais. Ou funções que recebem arrays normais, ou arrays multidimensionais como parâmetros.  Ou mesmo ainda funções que recebem funções como parâmetros e/ou retornam funções. 
+Mais cometerias muitos erros em deduzir que esta sintaxe é suficiente  para definir qualquer tipo de função. Por exemplo funções que retornam arrays, arrays multidimensionais, ou funções que recebem arrays normais, ou arrays multidimensionais como parâmetros,  ou mesmo ainda funções que recebem funções como parâmetros e/ou retornam funções não funcionaria exactamente com esta sintaxe. Esta sintaxe precisa um pouco de adaptação.
 
-Lamento, mas quanto ao comportamento, C++, não é um jogo de adivinha nem de intuição. Tenha Cautela quando quiseres definir funções que retornam e/ou recebem aurgumentos de tipo arrays normais ou multidimensionais. Voltaremos a falar disso nas próximas seções para esclarecer as sintaxes incoerentes mais justificáveis. Também não precisas preocupar-se porque explicar esses problemas e o objectivo deste artigo.
+Lamento, mas quanto ao comportamento, C++, não é um jogo de adivinha nem de intuição. Apenas tenha Cautela quando quiseres definir funções que retornam e/ou recebem aurgumentos de tipo arrays normais ou multidimensionais. Voltaremos a falar disso nas próximas seções para esclarecer as sintaxes incoerentes mas justificáveis de funções que retornam e/ou recebem aurgumentos de tipo arrays. Também não precisas preocupar-se porque explicar esses problemas é o objectivo deste artigo.
 
 ### <a name="DF-PN-PA"></a> 1.2.2 Declarações de Funções com parâmetros de tipo array/lista ???
 
-Funções podem receber argumentos, como vimos na secção anterior. Mas as vezes queremos passar argumentos um pouco mais complexos como lista de valores. É  bem possível fazer isto em C++, a sintaxe é quase a mesma que definir funçoes que 
-recebem parâmetros normais, mais o comportamento é  diferente. Aqui vai uma das sintaxe para definir funções que recebem array (lista) como argumentos :
+Funções podem receber argumentos como vimos na secção anterior. Mas as vezes queremos passar argumentos um pouco mais complexos como por exemplo **lista de valores**. É  bem possível fazer isto em C++, a sintaxe é semelhante a definiçoes de funçoes que recebem parâmetros normais, mais o comportamento é  diferente. Aqui vai uma das sintaxes para definir funções que recebem array (lista) como argumentos :
 
 ```c++
-   // função com parâmetro de tipo ponteiro, e que recebe um argumento de tipo ponteiro/array
+   // função com parâmetro de tipo ponteiro, e que recebe um argumento de tipo ponteiro
   void manipula(double* p){ // faz alguma coisa com o ponteiro}
 
   // função com parâmetro de tipo lista, e que recebe um argumento de  tipo lista 
@@ -167,20 +165,89 @@ Praticamente as duas funções definidas acima podem ser utilizada para o mesmo 
   computa(lista);
 
 ```
-Viu ? as duas funções foram definidas com parâmetros de tipos diferentes, mas foi possível passar-lhes argumento do mesmo tipo no nosso caso passamos uma lista.  Como isto é possível ?  Isto é possível porque na verdade em C++ não é possível copiar uma lista na outra( *lista1 = lista2*). E para resolver este problema o compilador converte qualquer tipo de lista 
-em ponteiro.  
+Viu ? as duas funções foram definidas com parâmetros de tipos diferentes, mas foi possível passar-lhes argumento do mesmo tipo, no nosso caso passamos uma lista.  Como isto é possível ?  Isto é possível porque na verdade em C++ não é possível copiar uma lista na outra( *lista1 = lista2*). E para resolver este problema o compilador converte qualquer tipo de lista 
+em ponteiro ( no contexto de uma função).  
 
-Você ainda deve estar a se perguntar, mas em que momento fazemos cópia de uma lista para outra ?  Quando chamamos as nossas funções nos exemplos acima, exactamente na função computa que tem um parâmetro de tipo lista. E quando chamamos a função e lhe passamos um argumento lista
+Você ainda deve estar a se perguntar, mas em que momento fizemos cópia de uma lista para outra ?  Quando chamamos as nossas funções nos exemplos acima, exactamente na função computa que tem um parâmetro de tipo lista, quando chamamos a função e lhe passamos um argumento de tipo lista/array *lista*
 
 ```c++
   // chamar a função para computar os valores na lista
   computa(lista);
 ```
-Sabemos que em C++ tem dois tipos de passagem de parâmetros. Passagem por valor (copia) e passagem por referência. E por defeito passagem de parâmetros e por cópia. Então quando chamamos a nossa função *computa* e lhe passamos a variável 
-lista *computa(lista)* o compilador pega na variável lista e tenta copiar na variável *li* (parâmetro da função *computa*. E neste momento onde o compilador detecta uma inconformidade, para resolver o problema, converte o argumento em ponteiro para que tudo corra bem.
+Sabemos que em C++ existe dois tipos de passagem de parâmetros. Passagem por valor (copia) e passagem por referência. E por defeito passagem de parâmetros é por cópia. Então quando chamamos a nossa função *computa* e lhe passamos a variável 
+lista, exemplo : *computa(lista)* o compilador pega na variável lista e tenta copiar na variável *li* (parâmetro da função *computa*). É neste momento onde o compilador detecta uma inconformidade, porque não é possivel copiar uma lista na outra. Para resolver o problema, o compilador converte o argumento em ponteiro para que tudo corra bem. 
 
 Como o compilador converte todos parâmetros de tipo array/lista em ponteiro, por isso é que a função manipula funciona 
-muito bem quando passamos a nossa variável lista, porque no fundo todos parâmetros de tipo lista são convertidos em ponteiros, e neste caso o compilador não precisa fazer operação adicional de conversão, por o parâmetro da função já é um ponteiro. 
+muito bem quando passamos a nossa variável lista, porque no fundo todos parâmetros de tipo lista são convertidos em ponteiros, e neste caso o compilador não precisa fazer operação adicional de conversão, porque o parâmetro da função *manipula* já é um ponteiro ( *manipula(int\* p)* ). 
+
+Dito isto vale apena também acrescentar, que como parâmetros de tipo array/lista não podem ser copiados, então a única forma de passar argumentos de tipo arrays/listas para funções é por intermédio de ponteiro ou referência.
+
+Uma vez que sabemos que arrays sao convertidos em ponteiros quando se trata de uma função, ai vem a questão, como devemos utilizar um argumento de tipo lista dentro da função ? Como ponteiro ou como array/lista ?  Esta é uma boa questão ! Existem pelomenos duas formas de como podemos utilizar dentro de uma função  um lista passada como argumento. Da forma que definimos as nossas funções *manipula* e *computa* não é muito prático trabalhar com listas, porque dentro das funções nao temos noção do tamanho da lista passado como argumento, ou melhor, não sabemos quantos elementos a lista contém. Então as duas opções mais simples são :
+
+- **1° Opção :** Passar o tamanho da lista como argumento extra nas funções *manipula* e *computa*
+```c++
+
+  void manipula(double* p, int tamanho)
+  { 
+    // adicionar 1 a cada elemento da lista
+    for(int i = 0; i < tamanho; i++){
+        p[i] = p[i] + 1;
+    }
+  }
+
+  void computa(double li[], int tamanho)
+  { 
+      // imprimir todos elementos da lista
+       for(int i = 0; i < tamanho; i++){
+        cout<< li[i] <<endl;
+    }
+  }
+  
+int main()
+{
+  // definição de uma lista de números decimais, com quatro elementos
+  double lista[4] = {3.44 , 1.00 , 0.99 , 3.14}; 
+
+  // chamar a função para manipular os valores da lista
+  manipula(lista, 4);
+
+  // chamar a função para computar os valores na lista
+  computa(lista, 4);
+  return 0;
+}
+  
+```
+Nos exemplos a cima dá para notar que um ponteiro quando aponta para uma lista se comporta como uma lista normal, e que podemos obter cada elemento da lista utilizando o operador "[]" e a posição em questão ( *[poiscao]* ).
+
+- **2° Opção :** Em vez de passar um ponteiro, passar dois ponteiros como argumentos, um que aponta no primeiro elemento da lista e outro que aponta para o ultimo elemento da lista ( ou melhor, que aponta para o endereço a seguir do ultimo elemento da lista)
+
+Esta opção aplica-se apenas para funções que definem ponteiros como parâmetros, no nosso caso a função manipula
+```c++
+  void manipula(double* inicio, double* fin)
+  { 
+    // adicionar 1 a cada elemento da lista
+    for(auto pCorrente = inicio; pCorrente != fin; pCorrente++)
+    {
+        *pCorrente = *pCorrente + 1;
+    }
+  }
+  
+int main()
+{
+  // definição de uma lista de números decimais, com quatro elementos
+  double lista[4] = {3.44 , 1.00 , 0.99 , 3.14}; 
+
+  // chamar a função para manipular os valores da lista
+  /*
+    função begin retorna um ponteiro que aponta no primeiro elemento da lista
+    função end retorna um ponteiro que aponta no elemento asseguir do ultimo elemento da lista
+  */
+  manipula(std::begin(lista) , std::end(lista));  
+  
+  return 0;
+}
+```
+Qual opção é a mais simples ou facil de absorver, a resposta fica à teu critério :) 
 
 Aqui foi mais uma explicação das armadilhas do C++. Espero que tenhas entendido este conceito de conversão de lista em ponteiros. Porque voltaremos a falar dela nas próximas sessões.
 
