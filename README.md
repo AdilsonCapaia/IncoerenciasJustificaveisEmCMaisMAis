@@ -10,13 +10,19 @@ Reflexões sobre algumas Incoerências e armadilhas em C++, e tentativas de clar
     -   ### [1.2 Breve Introdução a funções](#BIF) 
            - #### [1.2.1 Declarações de Funções normais](#DFN)
            - #### [1.2.2 Declarações de Funções com parâmetros de tipo array ???](#DF-PN-PA)
-           - ####  [1.2.3 Declarações de funçoes que retornam arrays ???](#DF-RA)
-    -   ### [1.3 Ponteiros que apontam a arrays](#PAA)
-           - #### 1.3.1 Incoerência ou  Interpretação intuitiva precipitada ?
-           - #### 1.3.1 Forma certa, Justificação/Entendimento do compilador
-    -   ### [1.4 Ponteiros que apontam para funções](#PAF)
+           - #### [1.2.3 Funções que retornam arrays](#FRA)
+    -   ### [1.4 Ponteiros que apontam a arrays](#PAA)
            - #### 1.4.1 Incoerência ou  Interpretação intuitiva precipitada ?
-           - #### 1.4.1 Forma certa, Justificação/Entendimento do compilador
+           - #### 1.4.2 Forma certa, Justificação/Entendimento do compilador
+    -   ### [1.5 Ponteiros que apontam para funções](#PAF)
+           - #### 1.5.1 Incoerência ou  Interpretação intuitiva precipitada ?
+           - #### 1.5.2 Forma certa, Justificação/Entendimento do compilador
+    -   ### [1.6 Funções com parâmetros de tipo funções](#FPF)
+           - #### 1.6.1 Incoerência ou  Interpretação intuitiva precipitada ?
+           - #### 1.6.2 Forma certa, Justificação/Entendimento do compilador
+    -   ### [1.7 Funções que retornam funções](#FRF)
+           - #### 1.7.1 Incoerência ou  Interpretação intuitiva precipitada ?
+           - #### 1.7.2 Forma certa, Justificação/Entendimento do compilador
 # <a name="P"></a> Problemáticas
 
 Todos sabemos que C++ é uma linguagem complexa, um dos factores que a torna assim são: o comportamento, a sua semântica e a sua sintaxe.
@@ -249,5 +255,45 @@ int main()
 ```
 Qual opção é a mais simples ou facil de absorver, a resposta fica à teu critério :) 
 
-Aqui foi mais uma explicação das armadilhas do C++. Espero que tenhas entendido este conceito de conversão de lista em ponteiros. Porque voltaremos a falar dela nas próximas sessões.
+### <a name="FRA"></a> 1.2.3 Funções que retornam arrays 
 
+Nas duas seções anteriores vimos 80% do comportamento essencial de funções, então espero que nesta secção não haja surpresa.  
+Em alguns programas que escreverás enquanto programador, por vezes precisarás passar uma lista como argumento de uma função para manipular os elementos dentro da lista, e por qualquer razão desconhecida necessitarás de retornar esta lista através da função. A questão é,  como fazer uma função retornar uma lista/array ?
+
+Bem, retornar uma variável é como se fosse passar um argumento para uma função, ou é por valor(copia) ou por referência. Também sabemos que arrays não podem ser copiados. Podemos logo concluir que não podemos fazer uma funçao retornar uma lista de tipo array ( *[]* ), mas não fica triste. Também sabemos que funções podem retornar ponteiros, e que arrays podem ser, e são convertidos para ponteiros quando nos encontramos no contexto de uma função. Isto nos leva a reavaliar a nossa conclusão anterior,  e concluir que na verdade podemos fazer uma função retornar uma lista, só devemos nos lembrar que a lista será convertida em ponteiro.  
+
+Para definir uma função que retorna uma lista de tipo array ( *[]* ) , precisamos definir o retorno desta função como um ponteiro, como ilustrado abaixo :
+
+```c++
+int* transforma(int arr[])
+{
+    // faça algo com a lista “arr”
+    // retorna a lista
+    return arr;
+}
+
+int main()
+{
+    int lista[3] = {3, 5, 7};
+    int* p = transforma(lista, 3);
+    // imprimir a lista retornada por intermedio de "p"
+    for( int i = 0; i < 3; i++)
+        cout<< p[i]<<endl;
+    return 0;
+}
+```
+Espero que estejas mais confortável com o exemplo acima. Quando chamamos a função  *transforma*, sabemos que ela deve retornar uma lista, mas também não devemos esquecer que esta lista/array será convertido em um ponteiro do mesmo tipo, por isso é necessário que a variável que receberá o retorno seja um ponteiro, no nosso caso o *p*.  Atravez do nosso exemplo acima também dá para observar que depois de recebermos a lista convertida em ponteiro podemos utilizá-la como se fosse um ponteiro ou como se fosse uma lista normal, recuperando os elementos dentro da lista com o operador ( *[]* ).
+Se você é como eu, curioso, então deves estar a se perguntar… Como é possível utilizar um ponteiro como se fosse uma lista ? Existem duas razões que permitem um ponteiro se comportar como uma lista : aqui vão elas
+
+ - **1° Razão** : Quando um ponteiro aponta para o primeiro elemento de uma lista de tipo array ( *[]* )
+```c++
+  double arr[] = { 00.4, 0.99, 1.55};
+  double* pd = arr // automaticamente “pd” aponta para o primeiro elemento da lista “arr”
+  double pd2 = arr[0]; // mesma coisa situação que “pd”, “pd2” aponta para o primeiro elemento da lista arr
+```
+ - **2° Razão** : Quando há uma conversão de array para ponteiro, no contexto de uma função ( parâmetro ou retorno )
+
+
+Aqui está a demonstração de como podemos fazer uma função retornar uma lista de tipo array por intermédio de um ponteiro
+
+Aqui foi mais uma explicação das armadilhas do C++. Espero que tenhas entendido este conceito de conversão de lista em ponteiros. Porque voltaremos a falar dela nas próximas sessões.
