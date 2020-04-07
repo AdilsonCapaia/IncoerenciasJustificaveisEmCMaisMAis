@@ -4,7 +4,7 @@ Reflexões sobre algumas Incoerências e armadilhas em C++, e tentativas de clar
 ## Índice
   - ## [Termos e Significações](#TS)
   - ## [Problemáticas](#P)
-  - ## [1 Incoerências entre declaraões/definições de ponteiros que apontam para *arrays e funções*](#IDAF)
+  - ## [1 Incoerências entre declaraões/definições de ponteiros que apontam para *arrays e/ou funções*](#IDAF)
     -   ### [1.1 Breve Introdução de Ponteiros](#BIP)
            - #### [1.1.1 Declarações de Ponteiros normais](#DPN)
     -   ### [1.2 Breve Introdução a funções](#BIF) 
@@ -19,14 +19,14 @@ Reflexões sobre algumas Incoerências e armadilhas em C++, e tentativas de clar
            - #### 1.4.1 Forma certa, Justificação/Entendimento do compilador
 # <a name="P"></a> Problemáticas
 
-Todos sabemos que C++ é uma linguagem complexa, um dos factores que a torna assim são o comportamento, semântica e a sintaxe.
-Comportamento e semântica, como programadores não podemos alterar muita coisa, então deixamos para os compiladores. Mas, quanto a sintaxe, visto que é a interface entre o programador e o compilador então acho que a certos esforço a fazer para tornar a linguagem que nos tanto amamos mais compreensível e flexível para o nosso dia dia.
+Todos sabemos que C++ é uma linguagem complexa, um dos factores que a torna assim são: o comportamento, a sua semântica e a sua sintaxe.
+Comportamento e semântica, como programadores não podemos alterar muita coisa, então deixamos para os compiladores. Mas, quanto a sintaxe, visto que é a interface entre o programador e o compilador então acho que ha certos esforços a fazer para tornar a linguagem que nós tanto amamos mais compreensível e flexível para nós mesmo no nosso dia dia.
 
 Como programador, tentando masterizar o C++, encontrei e provavelmente continuarei a encontrar alguns conceitos/sintaxes do C++ um pouco incoerentes e um pouco difícil de absorver. Uma dessas incoerências podem ser vistas no momento de declaração/definição de :
 - Ponteiros que apontam para **arrays**
 - Ponteiros que apontam para **funções**
 
-Ponteiros que apontam para tipos primitivos ( int, double, char, etc ...) e objetos (class, struct) são fáceis de absorver porque suas declarações/definições são uniformes como por exemplo
+Ponteiros que apontam para tipos primitivos como ( int, double, char, etc ...) e objetos (class, struct) são fáceis de absorver porque suas declarações/definições são uniformes, como por exemplo :
 
 ```c++
 struct Coisa { ... } ;
@@ -41,17 +41,18 @@ int (*pArr)[3];      // ponteiro que aponta para um array de tres elementos
 ```
 Baseando-se na sintaxe do **pi**, **pC** e **pAC** podemos deduzir intuitivamente a sintaxe para definir qualquer tipo de ponteiro com o seguinte padrão( pattern) :
 
-**tipo * nomeDaVarivel ;**
+**tipoDeDado * nomeDaVarivel ;**
 
-Mas estarias errado se seguisses essa intuiçao/padrão para definir **um ponteiro que aponta para um array**. Tentando imititar O padrão a cima, intuitivamente definiriamos um **ponteiro que aponta para uma variável de tipo array** da seguinte forma :
+Mas, estarias errado se seguisses essa intuiçao/padrão para definir **um ponteiro que aponta para um array**. Tentando imititar O padrão a cima para definir ***intuitivamente*** um **ponteiro que aponta para uma variável de tipo array** poderiamos fazer o seguinte :
 ```c++
 /* 
-definiaçao correcta, mas não um ponteiro que aponta para um array
-Intuiçao para definir um ponteiro que aponta para um array
+definiaçao correcta, mas não é um ponteiro que aponta para um array
 */
-int* pArr[2]; // "pArr" é um array que pode conter dois elementos de tipo ponteiros que apontam para variaveis de tipo inteiros
-// ou uma outra sintaxe que conseguires deduzir intuitivamente 
+int* pArr[2]; // "pArr" é um array que pode conter dois elementos de tipo ponteiros de tipo int
+
 ```
+ou ainda se quiseres mais exemplos, voce poderia dar um exemplo intuitivo da sua forma seguindo o padrão a cima.
+
 Como ja disse a cima e repito estariamos errados se seguissemos essa lógica neste caso. 
 
 Lamento dizer-te isto mas C++ não é sobre intuição, mas sim a cerca de conhecer ela intimamente e ceder a suas grandezas.
@@ -67,21 +68,27 @@ Este Artigo/projecto serve para abordar e facilitar a compreensão destas incoer
 | variavel      | int numero;   | *numero* é nome de uma variável, ou bjeto |
 | objeto        | Coisa co;     | *co* é um objeto ou instancia, ou ainda nome de uma variavél |
 
-# <a name="IDAF"></a> 1 Incoerências entre declaraões/definições de ponteiros que apontam para *arrays e funções*
+# <a name="IDAF"></a> 1 Incoerências entre declaraões/definições de ponteiros que apontam para *arrays e/ou funções*
 
 ## <a name="BIP"></a> 1.1 Breve Introdução de Ponteiros
-Ponteiros são construct ou tipos de objectos que aponta para o endereço de memória de uma outra variável e que permite manipular o valor contido nesta variável. Isto quer dizer que um ponteiro por si mesmo não tem utilidade, a menos que ele aponta para uma variável. Se uma variável já têm o seu próprio endereço e com o nome da variável pudemos mudar o valor contido dentro, então porquê precisamos de um ponteiro? Boa questão... Aqui vão as razoes
+Ponteiros são construct ou tipos de objectos que apontam para o endereço de memória de uma outra variável e que permitem manipular o valor contido nesta variável. Isto quer dizer que um ponteiro por si mesmo não tem utilidade, a menos que ele aponta para uma variável. Se uma variável já têm o seu próprio endereço e com o nome da variável pudemos manipular o valor contido dentro, então porquê precisamos de um ponteiro ? Boa questão... Aqui vão as razões
 - *Precisamos de ponteiro porque em C++ existem duas formas de passar parâmetros para funções, por valor e por referência, e uma das formas para passar variáveis por referência é através de ponteiros.*
 - *Também precisamos de ponteiro porque não existe um outro jeito de passar arrays ou funções como argumento de uma função.*
 - *E por último, precisamos de ponteiro porque é único meio que nos permite fazer gestão dinâmica de memória.*
 ### <a name="DPN"></a> 1.1.1 Declarações de Ponteiros normais
 Ja sabemos as necessidades de um ponteiro, mas, como definir e utilizar um ponteiro normal ? A sintaxe para declarar um ponteiro normal é a seguinte *tipo** *nomeDoPonteiro = &nomeDavarievelparaApontar;*
 ```c++
+  // declarao de uma varivel de tipo inteiro
   int numero = 10; 
-  int* pi; // declaracao de um ponteiro que aponta para uma variavel de tipo int
+  int* pi; // declaracao de um ponteiro que pode apontar para uma variavel de tipo int
   pi = &numero; // "pi" agora aponta para a varivel "numero", ou para o endereço da varivel "numero"
+  
+  //definiçao de um avariavel de tipo texto
+  string palavra = "Bom dia";
+  // ou declarao e affectaçao de um endereço ao mesmo tempo
+  string* outroP = &palavra //declaracao de um ponteiro que pode apontar para uma variavel de tipo string
 ```
-Uma vez definido o ponteiro, e ter lhe dado o endereço de uma variável, dai para frente podemos utilizar este ponteiro ( *pi* ) como se fosse a nossa variável  ( *numero* ) das seguintes maneiras...
+Uma vez definido o ponteiro, e ter lhe dado o endereço de uma variável, dai para frente podemos utilizar este ponteiro, no nosso caso ( *pi* ) como se fosse a nossa variável  ( *numero* ) das seguintes maneiras...
 ```c++
 ...
    cout<<numero<<endl; // numero é igual a 10
@@ -92,7 +99,7 @@ Uma vez definido o ponteiro, e ter lhe dado o endereço de uma variável, dai pa
    cout<<*pi<<endl; // "*pi" é igual a 20
 ```
 Para modificar ou recuperar o valor da variável que o ponteiro aponta devemos desreferenciar o ponteiro com o asterisco 
-**( * )**. Chama-se desreferenciar porque o ponteiro aponta para o endereço da variável. E se utilizamos o ponteiro da maneira a baixo, imprimirá o endereço da variável que o ponteiro aponta
+**( * )**. Chama-se desreferenciar porque o ponteiro aponta para o endereço da variável. E se utilizamos o ponteiro da maneira a baixo, imprimirá o endereço da variável que o ponteiro aponta, e não o valor contido na variável
 ```c++
 cout<<pi<<endl; // imprimi o endereço da variavel "numero"
 ```
