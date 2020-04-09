@@ -11,7 +11,7 @@ Reflexões sobre algumas Incoerências e armadilhas em C++, e tentativas de clar
            - #### [1.2.1 Declarações de Funções normais](#DFN)
            - #### [1.2.2 Declarações de Funções com parâmetros de tipo array ???](#DF-PN-PA)
            - #### [1.2.3 Funções que retornam arrays](#FRA)
-    -   ### [1.4 Ponteiros que apontam a arrays](#PAA)
+    -   ### [1.4 Ponteiros que apontam para arrays multidimensional](#PAA)
            - #### 1.4.1 Incoerência ou  Interpretação intuitiva precipitada ?
            - #### 1.4.2 Forma certa, Justificação/Entendimento do compilador
     -   ### [1.5 Ponteiros que apontam para funções](#PAF)
@@ -289,7 +289,7 @@ Se você é como eu, curioso, então deves estar a se perguntar… Como é poss�
 ```c++
   double arr[] = { 00.4, 0.99, 1.55};
   double* pd = arr // automaticamente “pd” aponta para o primeiro elemento da lista “arr”
-  double pd2 = arr[0]; // mesma coisa situação que “pd”, “pd2” aponta para o primeiro elemento da lista arr
+  double* pd2 = &arr[0]; // mesma situação que “pd”, “pd2” aponta para o primeiro elemento da lista arr
 ```
  - **2° Razão** : Quando há uma conversão de array para ponteiro, no contexto de uma função ( parâmetro ou retorno )
 
@@ -297,3 +297,58 @@ Se você é como eu, curioso, então deves estar a se perguntar… Como é poss�
 Aqui está a demonstração de como podemos fazer uma função retornar uma lista de tipo array por intermédio de um ponteiro
 
 Aqui foi mais uma explicação das armadilhas do C++. Espero que tenhas entendido este conceito de conversão de lista em ponteiros. Porque voltaremos a falar dela nas próximas sessões.
+
+## <a name="PAA"></a> 1.4 Ponteiros que apontam para arrays multidimensional
+Um ponteiro normal é diferente de um ponteiro que aponta para um array multidimensional, mais conhecido como matrix. 
+Um ponteiro normal pode apontar para o endereço de uma variável normal, ou para um tipo de array/lista unidimensional, 
+por exemplo ( *listaUD[]* ). E um ponteiro que aponta para uma lista que contém outra lista, este serve para apontar em array/lista multidemensional, por exemplo( *listaMD[][]* ), conhecida como matrix.
+
+Antes de irmos em detalhes analisa o exemplo abaixo :
+```c++
+ //lista unidemensional 
+ int lista[2] = { 3 , 0};
+ int *p = lista; // “p” pode apontar para uma variável normal, ou lista unidimensional
+ // lista multidemensional 
+ int matrix[2][2] = { {2,3}, {4,3} }; // obrigatório especificar a segunda dimensão
+```
+Como definirias um ponteiro que pode apontar para a nossa lista multidimensional *matrix* ? 
+
+### 1.4.1 Incoerência ou  Interpretação intuitiva precipitada ?
+Os dois chamam-se ponteiros mas exigem sintaxes diferentes. Existem pelo menos duas formas para definir um ponteiro que apontam para listas multidimensionais ou seja, para matrix. Uma delas é ponteiro de ponteiros com a sintaxe *tipoDeDado\*\**, 
+Outra forma e,  ponteiro para listas com uma sintaxe incoerente igual a esta abaixo *tipoDeDado  (\* nomeDoPonteiro)[ NumeroDeElementos] ;*
+Tendo visto a sintaxe acima podemos definir um ponteiro que aponta para nossa lista multidimensional *matrix* definida anteriormente
+```c++
+  int (*pA)[2] ;
+  pA = matrix; // “pA” é um ponteiro que aponta para listas multidimensional
+```
+Para uma lista multidimensional é obrigatório especificar o número de elementos das dimensões posteriores, no nosso caso a segunda dimensão. Tanto no ponteiro como como na lista multidimensional.
+*pA* aponta para o primeiro elemento da lista que contém outras listas *matrix*, ou seja, lista multidimensional. E este primeiro elemento é o elemento que se encontra na posição “0” (zero), que ele mesmo também é uma lista que contém dois elementos {2 , 3}. 
+O ponteiro *pA* aponta para a primeira posiçao da nossa *matrix*, e vimos também na secção [Funções que retornam arrays](https://github.com/AdilsonCapaia/IncoerenciasJustificaveisEmCMaisMAis#FRA) que esta afirmação é verídica. Quer dizer que também podemos utilizar a sintaxe a seguir para atribuir um valor ao nosso ponteiro *pA* :
+```c++
+   int (*pA)[2] = &matrix[0];
+```
+Apenas lembre-se que quando especificarmos uma posição para o ponteiro apontar, deves utilizar o operador de referência
+( **&** ).
+
+As duas sintaxes que acabamos de ver são equivalentes porque quando se trata de ponteiros que vão apontar para lista unidimensionais ou multidimensionais, se não especificarmos uma posição de antemão, automaticamente o compilador posiciona o ponteiro na primeira posição da lista ou  matrix em  questão. Por isso as duas sintaxes  **pA = &matrix[0]** e **pA = matrix** são equivalentes.
+
+Deixando este assunto para lá, eu não sei da tua parte, mas eu tenho muitas questões quanto a sintaxe para definirmos um ponteiro que aponta para uma matrix, por exemplo :
+- Porque é necessário meter o nome do ponteiro entre parêntesis ?
+- Porque é que o parêntesis recto *[]* fica fora do parêntesis curvo ? 
+
+### 1.4.2 Forma certa, Justificação/Entendimento do compilador
+Pôr o nome do ponteiro com o símbolo “\*” (asterisco) é obrigatório, porque se não fizermos desta forma estaríamos a sintaxe para definir um outro tipo de estrutura. Por exemplo se tirarmos o ponteiro dentro do parêntesis curvo como mostrado abaixo : 
+```c++
+  int* pM[2];
+```
+estaríamos a definir uma um lista que pode conter dois elementos de tipo ponteiro para inteiro. Daí a necessidade de isolar o asterisco e o ponteiro dentro de parêntesis curvo, desta maneira ele forma uma outra sintaxe e o compilador interpreta como um ponteiro que aponta para uma lista multidimensional.
+```c++
+  int (*pM)[2];
+```
+Entendo a tua inquietação, e sei que é uma sintaxe estranha, que só pelo facto de ter aumentado um parêntesis curvo que o comportamento muda drasticamente. 
+
+Para melhor entender esta sintaxe deves ler a sintaxe da seguinte forma. Primeiro começa pelo meio, *\*pM*, da para ver que *pM* é um ponteiro, olhando para fora do parêntesis curvo à direita têm um parêntesis recto *[2]*, isto nos dá mais informação sobre *pM*, dizendo que *pM* aponta para uma lista que contém dois elementos. E olhando para esquerda, temos mais uma informação, o tipo int, isto nos diz que a lista contém elementos do tipo inteiros.
+
+Contudo podemos concluir que * **pM** é um ponteiro que aponta para uma lista de dois elementos de tipo inteiro* . E não é qualquer tipo de lista, uma lista multidimensional.
+
+Aqui está, mais uma sintaxe obscura do C++ desvendada. Pronto para próxima ?
