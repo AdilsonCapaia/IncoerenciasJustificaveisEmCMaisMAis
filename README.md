@@ -32,6 +32,8 @@ Como programador, tentando masterizar o C++, encontrei e provavelmente continuar
 - Ponteiros que apontam para **arrays**
 - Ponteiros que apontam para **funções**
 
+Neste artigo utilizarei alternativamente as palavras array, lista ou vector para se referir a mesma coisa, um vector unidimensional, exemplo : int li[2] = {2,4};
+
 Ponteiros que apontam para tipos primitivos como ( int, double, char, etc ...) e objetos (class, struct) são fáceis de absorver porque suas declarações/definições são uniformes, como por exemplo :
 
 ```c++
