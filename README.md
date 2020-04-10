@@ -351,6 +351,6 @@ Entendo a tua inquietação, e sei que é uma sintaxe estranha, que só pelo fac
 
 Para melhor entender esta sintaxe deves ler a sintaxe da seguinte forma. Primeiro começa pelo meio, *\*pM*, da para ver que *pM* é um ponteiro, olhando para fora do parêntesis curvo à direita têm um parêntesis recto *[2]*, isto nos dá mais informação sobre *pM*, dizendo que *pM* aponta para uma lista que contém dois elementos. E olhando para esquerda, temos mais uma informação, o tipo int, isto nos diz que a lista contém elementos do tipo inteiros.
 
-Contudo podemos concluir que * **pM** é um ponteiro que aponta para uma lista de dois elementos de tipo inteiro* . E não é qualquer tipo de lista, uma lista multidimensional.
+Contudo podemos concluir que  ***pM** é um ponteiro que aponta para uma lista de dois elementos de tipo inteiro* . E não é qualquer tipo de lista, uma lista multidimensional.
 
 Aqui está, mais uma sintaxe obscura do C++ desvendada. Pronto para próxima ?
