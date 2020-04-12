@@ -360,7 +360,7 @@ Nas seções passadas vimos que ponteiros podem apontar para o endereço de uma 
 
 Dito isto você deve estar a se perguntar porque precisamos de ponteiros que apontam para funções ?  Bem, o uso de ponteiros que apontam para funções não é muito comum, aqui vai uma das razões que te levariam a usar ponteiros para funções :
 
-- *Dar possibilidades ao utilizador do teu programa de personalizar o programa
+- *Dar possibilidades ao utilizador do teu programa de personalizar o programa*
 - *Desenvolver bibliotecas ou frameworks*
 - *Muitas funcionalidades da biblioteca padrão do C++ fazem a utilização massiva de ponteiros para funções*
 
@@ -442,4 +442,95 @@ Se este tipo de código fosse permitido, muita coisa poderia correr mal. Quer di
 Por isso e que compilador exige que para definir um ponteiro que aponta para uma função o ponteiro deve ter o mesmo protótipo que a função. 
 
 Aqui está, mais um mistério do C++ desvendado, pronto para o próximo ?
+
+## <a name="FPF"> 1.6 Funções com parâmetros de tipo funções
+Na seção [1.2 Breve Introdução a funções](https://github.com/AdilsonCapaia/IncoerenciasJustificaveisEmCMaisMAis/blob/master/README.md#BIF) vimos que funções podem ter nenhum ou vários parâmetros de qualquer tipo permitido pelo C++. Por razões que não aprofundaremos neste documento, por vezes você precisará de passar funções como argumento de uma outra função. E para conseguir passar uma função **X** como argumento de uma outra **Y** é preciso declarar a função **Y** com pelo menos um parâmetro de tipo de uma função ???
+
+Porque precisaremos de funções que recebem funções como argumentos ? Precisaremos de funções que recebem funções como argumentos pelas mesmas razões que nos levariam a precisar de ponteiros que apontam para funções, por exemplo: 
+
+- *Dar possibilidades ao utilizador do teu programa de personalizar o programa*
+- *Desenvolver bibliotecas ou frameworks*
+- *Muitas funcionalidades da biblioteca padrão do C++ fazem a utilização massiva de passagem funções para funções*
+
+Se quiseres ver o que é possível fazer com funções  que apontam para funções, aconselho-te a dar uma olhada num pequeno projeto didático aqui : [Plugins e Delegates Em C++ com ponteiros e funções](https://github.com/AdilsonCapaia/PluginsEmCMaisMais)
+
+Como podemos definir uma função com parâmetro de tipo função ?
+
+### 1.6.1 Incoerência ou  Interpretação intuitiva precipitada ?
+Se você leu as seções [1.4 Ponteiros que apontam para arrays multidimensional](https://github.com/AdilsonCapaia/IncoerenciasJustificaveisEmCMaisMAis/blob/master/README.md#PAA)  e [1.5 Ponteiros que apontam para funções](https://github.com/AdilsonCapaia/IncoerenciasJustificaveisEmCMaisMAis/blob/master/README.md#PAF)  então você perceberá a sintaxe de parâmetros de tipo funções.
+
+Na verdade C++ nao consegue propriamente definir uma função que recebe função como argumento, porque se bem te lembras, existem dois tipos de passagem de parâmetros para funções, passagem por valor(copia) e por referência, por defeito passagem de parâmetros é feito por cópia, e C++ não permite a cópia de uma função para outra. Isto quer dizer que nao podemos passar uma função como argumento de uma outra função ? Sim e não, mas estamos a falar de C++ têm sempre um jeito de se virar, basta conhecer bem o compilador. 
+
+Não podemos copiar uma função à outra mas podemos fazer um ponteiro apontar para uma função, e através deste ponteiro, podemos utilizar o ponteiro como se fosse a nossa função.
+
+Existem duas sintaxes para definir um parâmetro  que pode ter o tipo de uma função. E as duas são totalmente equivalentes. 
+- A primeira é simplesmente definir o teu parâmetro como se fosse uma função :
+
+*funçaoPrincipal(parametro1,..., **retornoDaFunçaoParametro nomeDaFuncaoParametro(parametros…)** );*
+- A segunda sintaxe é definir o parâmetro da função como se fosse um ponteiro que aponta para função :
+*funçaoPrincipal(parametro1,..., **retornoDaFunçaoParametro (\*nomeDaFuncaoParametro)(parametros…)** );*
+é obrigatório por o símbolo **\*** asterisco e o nome do ponteiro entre parêntesis.
+
+Não estou a ver a tua cara, mas deves estar a pensar, que aberração e  esta ?
+
+Com as duas sintaxes acima podemos definir uma função que recebe uma outra função como argumento da seguinte maneira :
+```c++
+void mostrar(string algo){ cout<<algo<<endl; }
+
+// função que tem um parâmetro de tipo função
+void imprime(string conteudo, void imp(string) )
+{  
+  // chamar a nossa função que foi passada como argumento que agora se chama "imp" e lhe passamos o parametro conteudo
+  imp(conteudo);
+}
+
+int main()
+{
+    string meuTexto = "Boa Noite";
+    // Chamar a função imprimir, e lhe passar o primeiro argumento de string e uma função como segundo argumento , no nosso caso função "mostrar"
+    imprime(meuTexto, mostrar);
+}
+```
+Também podemos escrever o código acima com a segunda sintaxe , em vez de uma função normal,  o parâmetro tem de ser um ponteiro que aponta para uma função:
+```c++
+void mostrar(string algo){ cout<<algo<<endl; }
+// função que têm um parâmetro de tipo função
+void imprime( string conteudo,void (*imp)(string) )
+{  
+  // chamar a nossa função que foi passada como argumento que agora se chama "imp" e lhe passamos o parametro conteudo
+  imp(conteudo);
+}
+
+int main()
+{
+    string meuTexto = "Boa Noite";
+    // Chamar a função imprimir, e lhe passar uma função como argumento, no nosso caso função "mostrar"
+    imprime(meuTexto, mostrar );
+}
+```
+ 
+### 1.6.2 Forma certa, Justificação/Entendimento do compilador
+Os exemplos acima estão corretos, e respeitaram as regras das sintaxes permitidas. Mas como é que as duas funcionam como desejado ? Como é que as duas sintaxes são equivalentes ?
+
+Lembra o que disse anteriormente ?, não é possível copiar uma função na outra, mas é possível apontar para o endereço de uma função e utilizar esse ponteiro como se fosse a nossa função. é o que está acontecer nos dois exemplos acima. 
+
+Quando definimos a função : *void imprime( string conteudo, void (\*imp)(string) )* devemos interpretar ou ler da seguinte forma :
+
+*imprime* é uma função, se olharmos para esquerda vemos o *void* isso nos diz que a função *imprime* retorna nada. A seguir vamos para direita dentro do parênteses onde se encontra os parâmetros da função,  *conteudo* e *imprime*, e vemos logo que o segundo parâmetro da função *imprime* tem o nome de *imp*, e se olharmos a esquerda desse nome dá para ver o símbolo  **\*** asterisco isso nos diz que o parâmetro *imp* é um ponteiro, se olharmos para a direita do *imp* da para notar que *imp* aponta para uma função que têm uma parâmetro do tipo string, e se olharmos a esquerda do *imp* notamos que a função na qual o *imp* aponta tém um retorno de tipo void, então não retorna nada.
+
+Isto quer dizer simplesmente que *imprime* é uma função que têm dois parâmetros um do tipo string, e outro de tipo ponteiro que aponta para uma função.
+
+E quando utilizamos esta sintaxe : *void imprime(string conteudo, void imp(string) )* simplesmente quer dizer que *imprime* é uma função que têm dois parâmetros um do tipo string, e outro de tipo função mas que na verdade o compilador converte em ponteiro que aponta para uma função, ou seja igual a sintaxe estudada no parágrafo anteriormente.
+
+O compilador converte qualquer parâmetro de tipo função em ponteiro para função porque ele não pode copiar uma função na outra.  Como o compilador converte todo parâmetro de tipo função como ponteiro para função, é por esta razão que *void imprime( string conteudo,void imp(string) )*  e  *void imprime(string conteudo, void (\*imp)(string )* são equivalentes. Porque se o compilador não fizesse a conversão entre função normal, para ponteiro para função então quando chamássemos a nossa função imprime deste jeito :
+```c++
+ imprime(meuTexto, mostrar);
+```
+o compilador detetaria um erro, porque estaríamos a dizer ao compilador para copiar a função *mostrar* ao parâmetro *imp* da função *imprime* . Entao Como nao podemos copiar uma função na outra, o compilador transforma *imp* em ponteiro e depois lhe afeta o endereço da função mostrar. O nosso querido amigo compilador só faria esta conversão se o parâmetro no nosso caso *imp* não fosse ponteiro para função.
+
+O quê que acontece exatamente quando chamamos a função *imprime* como neste caso : *imprime(meuTexto, mostrar);*  ?. 
+
+Sabemos que em C++ quando estamos a chamar uma função devemos lhe fornecer os argumentos necessário exigido pela função. Como a função *imprime* exige dois parâmetros um do tipo string, e outro parâmetro de tipo função, então devemos lhe passar uma string e uma função quando chamamos ela, por isso lhe passamos a variável *meuTexto* e a função *mostrar*. E como a função *mostrar* também é uma função que exige parâmetro de tipo string, então dentro da função *imprime* para lhe chamar precisamos lhe passar um argumento, no nosso caso lhe passamos a variável de tipo string chamada *conteudo* que por sua vez contém o valor da variável *meuTexto* que foi passada através da função *imprime*.
+
+Espero que tenhas absorvido mais uma sintaxe obscura do C++, Se chegaste até aqui, considero-te uma campeão. Mas se queres ser campeão dos campeões aconselho-te a continuar com as próximas seções. Pronto ?
 
