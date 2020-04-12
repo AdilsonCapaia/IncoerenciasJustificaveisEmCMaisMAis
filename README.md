@@ -354,3 +354,84 @@ Para melhor entender esta sintaxe deves ler a sintaxe da seguinte forma. Primeir
 Contudo podemos concluir que  ***pM** é um ponteiro que aponta para uma lista de dois elementos de tipo inteiro* . E não é qualquer tipo de lista, uma lista multidimensional.
 
 Aqui está, mais uma sintaxe obscura do C++ desvendada. Pronto para próxima ?
+
+## <a name="PAF"> 1.5 Ponteiros que apontam para funções 
+Nas seções passadas vimos que ponteiros podem apontar para o endereço de uma variável, de um array unidimensional ou multidimensional.  Ponteiros não apontam somente para esses tipos de variáveis, ponteiros também podem apontar para o endereço de uma função ou seja, para uma função. 
+
+Dito isto você deve estar a se perguntar porque precisamos de ponteiros que apontam para funções ?  Bem, o uso de ponteiros que apontam para funções não é muito comum, aqui vai uma das razões que te levariam a usar ponteiros para funções :
+
+- *Dar possibilidades ao utilizador do teu programa de personalizar o programa
+- *Desenvolver bibliotecas ou frameworks*
+- *Muitas funcionalidades da biblioteca padrão do C++ fazem a utilização massiva de ponteiros para funções*
+
+É pelas razões acima, que aconselho-te a aprender a conhecer um pouco mais como se utiliza ponteiros para funções. 
+
+Se quiseres ver o que é possível fazer com ponteiros  que apontam para funções, aconselho-te a dar uma olhada num pequeno projeto didático aqui : [Plugins e Delegates Em C++ com ponteiros e funções](https://github.com/AdilsonCapaia/PluginsEmCMaisMais)
+
+Como podemos definir um ponteiro que aponta para uma função ? Na secção [Breve Introdução de Ponteiros](https://github.com/AdilsonCapaia/IncoerenciasJustificaveisEmCMaisMAis#BIP) demos uma sintaxe geral para definição de ponteiros de qualquer tipo, infelizmente vimos que aquela sintaxe não funciona para ponteiros que apontam para arrays e também não funcionará para funções. 
+
+### 1.5.1 Incoerência ou  Interpretação intuitiva precipitada ?
+A sintaxe que demos na secção [Breve Introdução de Ponteiros](https://github.com/AdilsonCapaia/IncoerenciasJustificaveisEmCMaisMAis#BIP) era a seguinte : **tipoDeDado \* nomeDaVarivel ;**
+
+Como já disse anteriormente, essa sintaxe não funciona para funções.
+
+Para definir um ponteiro que aponta para uma função, primeiro precisamos saber que tipo de função queremos apontar, só assim podemos declarar um ponteiro com as mesmas características.
+
+Por característica quero dizer, “com o mesmo protótipo que os da função que queremos apontar”.
+
+Mas  porquê não podemos seguir  uma sintaxe geral, porquê temos que copiar o protótipo da função em questão ?
+
+### 1.5.2 Forma certa, Justificação/Entendimento do compilador
+Devemos copiar o protótipo da função porque um ponteiro aponta para o endereço de um tipo, variável ou objeto. E o endereço de uma variável é a única forma de encontrar uma variável ou tipo na memória física do computador, e o tipo que a variável (objeto ou função) tém, determinará o espaço e o endereço(lugar) onde ela será guardada. 
+
+Resumindo, o ponteiro precisa ter o mesmo protótipo que a função porque assim o compilador consegue prever que este ponteiro está capacitado para aguentar a quantidade de memória(espaço) necessário para chamar e executa    r as instruções da função em causa. E também, esta política reforça a segurança entre tipos estáticos ( tipos deduzidos em tempo de compilação)
+
+Supondo que existe uma funçao qualquer definida algures, a sintaxe para definir um ponteiro para apontar para esta função hipotética é a seguinte :
+**tipoDeRetornoDaFunçaoParaApontar (\*nomeDoPonteiro)(parametrosDaFunçaoParaApontar);**
+
+Para definir um ponteiro que aponta para uma função é preciso pelo menos duas etapas :
+Supondo que temos uma função  definida do jeito abaixo :
+```c++
+//1° definir a função
+void imprimir(string palavra){ cout<<palavra<<endl; }
+```
+Podemos definir o ponteiro deste jeito :
+```c++
+//2° definir o ponteiro e afetar uma função
+void (*p)(string );  // “p” pode apontar para uma função que tem um parâmetro de tipo string e retorna void
+p = imprimir // “p” aponta para função imprimir
+p = &imprimir // mesma coisa que a linha de cima
+
+// utilização do ponteiro 
+string texto = “Bom dia”;
+p(texto); // chama a função imprimir e mostra no ecrã “Bom dia”
+```
+Depois de definirmos o ponteiro com o mesmo protótipo da função e termos lhe afetado o endereço da função em questão, daí para frente podemos utilizar o nosso ponteiro como se fosse nossa função. Como se fosse um segundo nome para nossa função.
+
+Nao fica assustado por ter dito que *p = imprimir* et *p = **&** imprimir* são equivalentes. Igualmente como nos arrays, em funções se você nao por o operador de referência **&** antes do nome da função, automaticamente o compilador deduzirá por você.
+
+Para um ponteiro conseguir apontar para o endereço  de uma função os seguintes critérios devem ser respeitados na declaração do ponteiro: 
+-  Mesmo tipo de retorno que a função 
+-  Mesmo número de parâmetros que a função
+-  E, os parâmetros do ponteiro devem ter exatamente os mesmos tipo de dado que os parametros da funcao, sem precisar de conversão
+
+Um vez o ponteiro definido e respeitado o protótipo da função, esse ponteiro pode ser utilizado para apontar para outras funções com o mesmo protótipo ( *mesmo tipo de retorno e mesmo número de parâmetros*), mesmo se o nome da função for diferente. Isto é bem possível porque o nome de uma função não faz parte do protótipo da função, apenas o retorno, e os parâmetros fazem parte do protótipo.
+
+Se para um ponteiro apontar para uma função não fosse necessário ter o mesmo protótipo, como desejarias que o código abaixo se comportasse ?
+```c++
+// definição de uma função que faz soma de dois números inteiros
+int soma(int a, int b){ return a + b; }
+
+// definição de um ponteiro que aponta para função função que retorna uma string 
+// Mau exemplo, apenas para ilustração
+string (*pStr)(string );
+pStr = &soma; // “p” aponta para uma função  que retorna um inteiro
+string palavra = “Teste”;
+pStr(palavra);
+```
+Se este tipo de código fosse permitido, muita coisa poderia correr mal. Quer dizer que o nosso ponteiro *pStr* passaria um argumento de tipo string para a função na qual pStr aponta (função *soma*), enquanto que a nossa função *soma* esperava dois argumentos de tipo inteiro para fazer a soma e retornar o resultado da soma.  
+
+Por isso e que compilador exige que para definir um ponteiro que aponta para uma função o ponteiro deve ter o mesmo protótipo que a função. 
+
+Aqui está, mais um mistério do C++ desvendado, pronto para o próximo ?
+
