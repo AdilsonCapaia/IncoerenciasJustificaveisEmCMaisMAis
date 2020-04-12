@@ -384,10 +384,12 @@ Mas  porquê não podemos seguir  uma sintaxe geral, porquê temos que copiar o 
 ### 1.5.2 Forma certa, Justificação/Entendimento do compilador
 Devemos copiar o protótipo da função porque um ponteiro aponta para o endereço de um tipo, variável ou objeto. E o endereço de uma variável é a única forma de encontrar uma variável ou tipo na memória física do computador, e o tipo que a variável (objeto ou função) tém, determinará o espaço e o endereço(lugar) onde ela será guardada. 
 
-Resumindo, o ponteiro precisa ter o mesmo protótipo que a função porque assim o compilador consegue prever que este ponteiro está capacitado para aguentar a quantidade de memória(espaço) necessário para chamar e executa    r as instruções da função em causa. E também, esta política reforça a segurança entre tipos estáticos ( tipos deduzidos em tempo de compilação)
+Resumindo, o ponteiro precisa ter o mesmo protótipo que a função porque assim o compilador consegue prever que este ponteiro está capacitado para aguentar a quantidade de memória(espaço) necessário para chamar e executar as instruções da função em causa. E também, esta política reforça a segurança entre tipos estáticos ( tipos deduzidos em tempo de compilação)
 
 Supondo que existe uma funçao qualquer definida algures, a sintaxe para definir um ponteiro para apontar para esta função hipotética é a seguinte :
 **tipoDeRetornoDaFunçaoParaApontar (\*nomeDoPonteiro)(parametrosDaFunçaoParaApontar);**
+
+É importante notar que a sintaxe acima deve ser respeitada ao pé da letra. Por exemplo, o símbolo **\*** asterisco e o nome do ponteiro devem estar dentro do parêntesis curvos. Se não respeitarmos isso, estaríamos a definir uma função que retorna um ponteiro do tipo especificado no retorno , e não um ponteiro que aponta para uma função, capiche ?
 
 Para definir um ponteiro que aponta para uma função é preciso pelo menos duas etapas :
 Supondo que temos uma função  definida do jeito abaixo :
@@ -403,9 +405,15 @@ p = imprimir // “p” aponta para função imprimir
 p = &imprimir // mesma coisa que a linha de cima
 
 // utilização do ponteiro 
-string texto = “Bom dia”;
+string texto = "Bom dia";
 p(texto); // chama a função imprimir e mostra no ecrã “Bom dia”
 ```
+Lembras quando disse que é necessário por o asterisco e nome do ponteiro dentro de parêntesis curvo ? imagina se no exemplo anterior não respeitássemos esta regra ?
+```c++
+   void* p(string );
+```
+Praticamente estaríamos a declarar uma função com o nome **p** que retorna um ponteiro de tipo void.  
+
 Depois de definirmos o ponteiro com o mesmo protótipo da função e termos lhe afetado o endereço da função em questão, daí para frente podemos utilizar o nosso ponteiro como se fosse nossa função. Como se fosse um segundo nome para nossa função.
 
 Nao fica assustado por ter dito que *p = imprimir* et *p = **&** imprimir* são equivalentes. Igualmente como nos arrays, em funções se você nao por o operador de referência **&** antes do nome da função, automaticamente o compilador deduzirá por você.
@@ -426,7 +434,7 @@ int soma(int a, int b){ return a + b; }
 // Mau exemplo, apenas para ilustração
 string (*pStr)(string );
 pStr = &soma; // “p” aponta para uma função  que retorna um inteiro
-string palavra = “Teste”;
+string palavra = "Teste";
 pStr(palavra);
 ```
 Se este tipo de código fosse permitido, muita coisa poderia correr mal. Quer dizer que o nosso ponteiro *pStr* passaria um argumento de tipo string para a função na qual pStr aponta (função *soma*), enquanto que a nossa função *soma* esperava dois argumentos de tipo inteiro para fazer a soma e retornar o resultado da soma.  
