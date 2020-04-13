@@ -37,6 +37,8 @@ Como programador, tentando masterizar o C++, encontrei e provavelmente continuar
 
 Neste artigo utilizarei alternativamente as palavras array, lista ou vector para se referir a mesma coisa, um vector unidimensional, exemplo : int li[2] = {2,4};
 
+Também utilizarei alternativamente as palavras declaração e definição para se referir a mesma coisa.
+
 Ponteiros que apontam para tipos primitivos como ( int, double, char, etc ...) e objetos (class, struct) são fáceis de absorver porque suas declarações/definições são uniformes, como por exemplo :
 
 ```c++
@@ -78,7 +80,9 @@ Este Artigo/projecto serve para abordar e facilitar a compreensão destas incoer
 | array         | int aLista[]; | lista, vector |
 | variavel      | int numero;   | *numero* é nome de uma variável, ou bjeto |
 | objeto        | Coisa co;     | *co* é um objeto ou instancia, ou ainda nome de uma variavél |
-
+| Declaração    | int c;        |  *c* foi declarado mas nao definido|
+| Definição     | int a = 10    | a, foi definido, ou declarado |
+ 
 # <a name="IDAF"></a> 1 Incoerências entre declaraões/definições de ponteiros que apontam para *arrays e/ou funções*
 
 ## <a name="BIP"></a> 1.1 Breve Introdução de Ponteiros
