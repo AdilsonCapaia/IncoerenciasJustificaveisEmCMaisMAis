@@ -10,7 +10,7 @@ Reflexões sobre algumas Incoerências e armadilhas em C++, e tentativas de clar
     -   ### [1.2 Breve Introdução a funções](#BIF) 
            - #### [1.2.1 Declarações de Funções normais](#DFN)
            - #### [1.2.2 Declarações de Funções com parâmetros de tipo array ???](#DF-PN-PA)
-           - #### [1.2.3 Funções que retornam arrays](#FRA)
+           - #### [1.2.3 Funções que retornam arrays normais](#FRA)
     -   ### [1.4 Ponteiros que apontam para arrays multidimensional](#PAA)
            - #### 1.4.1 Incoerência ou  Interpretação intuitiva precipitada ?
            - #### 1.4.2 Forma certa, Justificação/Entendimento do compilador
@@ -20,9 +20,12 @@ Reflexões sobre algumas Incoerências e armadilhas em C++, e tentativas de clar
     -   ### [1.6 Funções com parâmetros de tipo funções](#FPF)
            - #### 1.6.1 Incoerência ou  Interpretação intuitiva precipitada ?
            - #### 1.6.2 Forma certa, Justificação/Entendimento do compilador
-    -   ### [1.7 Funções que retornam funções](#FRF)
+    -   ### [1.7 Funções que retornam arrays multidimensionais](#FRAM)
            - #### 1.7.1 Incoerência ou  Interpretação intuitiva precipitada ?
            - #### 1.7.2 Forma certa, Justificação/Entendimento do compilador
+    -   ### [1.8 Funções que retornam funções](#FRF)
+           - #### 1.8.1 Incoerência ou  Interpretação intuitiva precipitada ?
+           - #### 1.8.2 Forma certa, Justificação/Entendimento do compilador
 # <a name="P"></a> Problemáticas
 
 Todos sabemos que C++ é uma linguagem complexa, um dos factores que a torna assim são: o comportamento, a sua semântica e a sua sintaxe.
@@ -257,7 +260,7 @@ int main()
 ```
 Qual opção é a mais simples ou facil de absorver, a resposta fica à teu critério :) 
 
-### <a name="FRA"></a> 1.2.3 Funções que retornam arrays 
+### <a name="FRA"></a> 1.2.3 Funções que retornam arrays normais
 
 Nas duas seções anteriores vimos 80% do comportamento essencial de funções, então espero que nesta secção não haja surpresa.  
 Em alguns programas que escreverás enquanto programador, por vezes precisarás passar uma lista como argumento de uma função para manipular os elementos dentro da lista, e por qualquer razão desconhecida necessitarás de retornar esta lista através da função. A questão é,  como fazer uma função retornar uma lista/array ?
@@ -533,4 +536,67 @@ O quê que acontece exatamente quando chamamos a função *imprime* como neste c
 Sabemos que em C++ quando estamos a chamar uma função devemos lhe fornecer os argumentos necessário exigido pela função. Como a função *imprime* exige dois parâmetros um do tipo string, e outro parâmetro de tipo função, então devemos lhe passar uma string e uma função quando chamamos ela, por isso lhe passamos a variável *meuTexto* e a função *mostrar*. E como a função *mostrar* também é uma função que exige parâmetro de tipo string, então dentro da função *imprime* para lhe chamar precisamos lhe passar um argumento, no nosso caso lhe passamos a variável de tipo string chamada *conteudo* que por sua vez contém o valor da variável *meuTexto* que foi passada através da função *imprime*.
 
 Espero que tenhas absorvido mais uma sintaxe obscura do C++, Se chegaste até aqui, considero-te uma campeão. Mas se queres ser campeão dos campeões aconselho-te a continuar com as próximas seções. Pronto ?
+
+## <a name="FRAM"></a> 1.7 Funções que retornam arrays multidimensionais  
+Sabemos que funções podem retornar valores de tipo void ( quando nao retorna nada) ou um outro tipo permitido pela linguagem. Por razões desconhecidas neste momento, em algum momento ou projeto você precisará que uma função retorne um array multidimensional. A questão é, qual é a sintaxe para definir uma função que pode retornar um array multidimensional ?
+
+Como o retorno de uma função é feito por cópia, e como não podemos copiar um array no outro, é por esta razão que uma função não pode retornar exatamente um array multidimensional. 
+
+### 1.7.1 Incoerência ou  Interpretação intuitiva precipitada ?
+Sabemos a sintaxe para declarar/definir qualquer tipo de função
+*tipoRetorno nomeDaFunçao(tipo1 parametro1,...);*
+
+Então, seguindo a sintaxe acima, podemos tentar definir uma função que retorna uma variável de tipo array/lista multidimensional, não achas o mesmo ? intuitivamente seria assim :
+```c++
+int matrix[2][3]= {{2,4,0},{8,5,20}}; 
+// codigo a baixo apenas para ilustração, não é válido em C++
+int[][] retornaLista(){  return matrix; }
+```
+O exemplo acima não é um exemplo válido em C++ para definir uma função que retorna uma lista multidimensional. Isto quer dizer que a sintaxe geral de definição de uma função não funciona para declarar/definir uma função que retorna um array multidimensional.  
+
+O que nos leva na seguinte questão, então qual é a verdadeira sintaxe para declarar/definir uma função que pode retornar um array multidimensional  ?
+
+### 1.7.2 Forma certa, Justificação/Entendimento do compilador
+Se você leu a seção [1.2.3 Funções que retornam arrays]
+(https://github.com/AdilsonCapaia/IncoerenciasJustificaveisEmCMaisMAis/blob/master/README.md#FRA) você também viu que funções não podem retornar arrays normais, para o fazer foi preciso definir o retorno da função como um ponteiro. O mesmo deve ser feito com uma função que deve retornar arrays multidimensionais, mas com uma particularidade! qual ? Devemos definir o retorno da  função como um ponteiro que aponta para arrays multidimensionais e não como um ponteiro normal.
+
+Se você leu a seção [1.4 Ponteiros que apontam para arrays multidimensionais](https://github.com/AdilsonCapaia/IncoerenciasJustificaveisEmCMaisMAis/blob/master/README.md#PAA) então você já deve ter uma ideia de como definir o retorno da função, mas neste caso é preciso um pouco de cautela.
+
+A sintaxe para definir uma função que retorna um array multidimensional é a seguinte :
+
+*tipoDosElementoNoArray (\*nomeDaFunçao(parametros,....))[numeroDaSegundaDimensao]
+{ 
+ //corpo da função 
+ return arrayMultidiemensional 
+}*
+
+Com a sintaxe acima podemos definir nossa função *retornaLista* definida anteriormente desta forma :
+```c++
+int matrix[2][3]= {{2,4,0},{8,5,20}}; 
+
+int (*retornaLista())[3]{  return matrix; }
+
+int main()
+{
+  // afectar o retorno da função "retornaLista" no ponteiro para lista multidimensional "pD"
+  int (*pD)[3];
+  pD = retornaLista();
+  return 0;
+}
+```
+Definimos a nossa função *retornaLista* com a sintaxe correcta, mas sei que tem muita coisa  a se passar por aí, não se preocupe, vou explicar passo por passo o que está a se passar aí em cima.
+
+Primeiro vamos começar com a definição da função *retornaLisa* : int (*retornaLista())[3]{  return matrix; }
+
+Para absorver esta sintaxe é preciso ler da seguinte forma. Começamos pelo nome *retornaLista* olhamos para direita e notamos logo que ela tem um parênteses,isso indica que *retornaLista* é uma função, e como dentro do parênteses não tem nada, quer dizer que é uma função sem parâmetros. A seguir olhamos para esquerda para ter mais informações, e notamos que têm o asterisco **\***, isto nos diz que nossa função retorna um ponteiro. Olhando para direita veremos que temos o parênteses recto com um número, isso nos diz que se desreferenciarmos o valor retornado pela nossa função teremos um array de três dimensões. Mas não podemos esquecer que o array retornado é multidimensional. E podemos recuperar todas dimensões do arrays atravessando o ponteiro, por exemplo *( p + i )* onde *i* é a  posição corrente.
+
+É uma sintaxe bruta, mas se leres mais uma vez o parágrafo anterior, tenho a certeza que perceberás.
+
+Outra instrução a observar é esta *pD = retornaLista();*
+
+Aqui simplesmente chamamos a função retornaLista(), e afetamos o valor retornado ao ponteiro *pD*. Mas sabemos que *pD* não é um ponteiro normal, *pD* é um ponteiro que aponta para um array multidimensional. Como sabemos que a função *retornaLista* retorna um array multidimensional, e que queríamos por esse retorno numa variável, por isso foi necessário definir *pD* como um ponteiro para arrays multidimensionais *( int (\*pD)[3]; )* .
+
+Uma vez recebido o nosso array multidimensional retornado, agora podemos utilizar o ponteiro *pD* como se fosse o array multidimensional retornado, ou seja, como se fosse a nossa variável *matrix*.
+
+Acabamos de desvendar mais uma sintaxe obscura do C++, pronto para a próxima ?
 
