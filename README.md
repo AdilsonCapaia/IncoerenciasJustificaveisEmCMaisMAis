@@ -77,11 +77,11 @@ Este Artigo/projecto serve para abordar e facilitar a compreensão destas incoer
 
 | Termo         | Exemplo       | Outros Significados  |
 | ------------- |:-------------:| :-----|
-| array         | int aLista[]; | lista, vector |
-| variavel      | int numero;   | *numero* é nome de uma variável, ou bjeto |
+| Array         | int aLista[]; | lista, vector |
+| Aariável      | int numero;   | *numero* é nome de uma variável, ou bjeto |
 | objeto        | Coisa co;     | *co* é um objeto ou instancia, ou ainda nome de uma variavél |
-| Declaração    | int c;        |  *c* foi declarado mas nao definido|
-| Definição     | int a = 10    | a, foi definido, ou declarado |
+| Declaração    | int c;        |  *c* foi declarado mas não foi definido|
+| Definição     | int a = 10    | a, foi declarado e definido |
  
 # <a name="IDAF"></a> 1 Incoerências entre declaraões/definições de ponteiros que apontam para *arrays e/ou funções*
 
