@@ -583,7 +583,7 @@ Definimos a nossa função *retornaLista* com a sintaxe correcta, mas sei que te
 
 Primeiro vamos começar com a definição da função *retornaLisa* : int (*retornaLista())[3]{  return matrix; }
 
-Para absorver esta sintaxe é preciso ler da seguinte forma. Começamos pelo nome *retornaLista* olhamos para direita e notamos logo que ela tem um parênteses,isso indica que *retornaLista* é uma função, e como dentro do parênteses não tem nada, quer dizer que é uma função sem parâmetros. A seguir olhamos para esquerda para ter mais informações, e notamos que têm o asterisco **\***, isto nos diz que nossa função retorna um ponteiro. Olhando para direita veremos que temos o parênteses recto com um número, isso nos diz que se desreferenciarmos o valor retornado pela nossa função teremos um array de três dimensões. Mas não podemos esquecer que o array retornado é multidimensional. E podemos recuperar todas dimensões do arrays atravessando o ponteiro, por exemplo *( p + i )* onde *i* é a  posição corrente.
+Para absorver esta sintaxe é preciso ler da seguinte forma. Começamos pelo nome *retornaLista* olhamos para direita e notamos logo que ele tem parênteses,isso indica que *retornaLista* é uma função, e como dentro do parênteses não tem nada, quer dizer que é uma função sem parâmetros. A seguir olhamos para esquerda para ter mais informações, e notamos que têm o asterisco **\***, isto nos diz que nossa função retorna um ponteiro. Olhando para direita veremos que temos o parênteses recto com um número, isso nos diz que se desreferenciarmos o ponteiro retornado pela nossa função teremos um array de três dimensões. Mas não podemos esquecer que o array retornado é multidimensional. E podemos recuperar todas dimensões do arrays atravessando o ponteiro, por exemplo *( p + i )* onde *i* é a  posição corrente.
 
 É uma sintaxe bruta, mas se leres mais uma vez o parágrafo anterior, tenho a certeza que perceberás.
 
@@ -594,4 +594,62 @@ Aqui simplesmente chamamos a função retornaLista(), e afetamos o valor retorna
 Uma vez recebido o nosso array multidimensional retornado, agora podemos utilizar o ponteiro *pD* como se fosse o array multidimensional retornado, ou seja, como se fosse a nossa variável *matrix*.
 
 Acabamos de desvendar mais uma sintaxe obscura do C++, pronto para a próxima ?
+
+## <a name="FRF"></a> 1.8 Funções que retornam funções
+Por razões raras que desconhecemos neste momento, em algum momento ou projeto você precisará fazer uma função retornar uma outra função. 
+
+Então como se declara ou define uma função com retorno de tipo função.
+
+Se você leu as seções [1.5 Ponteiros que apontam para funções](https://github.com/AdilsonCapaia/IncoerenciasJustificaveisEmCMaisMAis/blob/master/README.md#PAF), [1.6 Funções com parâmetros de tipo funções](https://github.com/AdilsonCapaia/IncoerenciasJustificaveisEmCMaisMAis/blob/master/README.md#FPF) e [1.7 Funções que retornam arrays multidimensionais](https://github.com/AdilsonCapaia/IncoerenciasJustificaveisEmCMaisMAis/blob/master/README.md#FRAM) então você entenderá como definir uma função que retorna uma outra função.
+
+### 1.8.1 Incoerência ou  Interpretação intuitiva precipitada ?
+Sabendo que a  sintaxe para declarar/definir qualquer tipo de função é :
+
+*tipoRetorno nomeDaFunçao(tipo1 parametro1,...);*
+
+Como sempre, estarias errado se utilizasses a fórmula acima para para definir uma função que retorna uma outra função.
+
+### 1.8.2 Forma certa, Justificação/Entendimento do compilador
+Não podemos propriamente definir uma função que retorna uma outra função, pelas mesmas razões que nos impedem de definir funções que retornam arrays unidimensionais ou multidimensionais.
+
+Mas, têm sempre uma alternativa, que é através de ponteiros. Não podemos retornar funções porque o compilador não permite a cópia de uma função à outra, mas por outro lado ele permite retornar funções através de ponteiros que apontam para funções (ou referência de funções). Isso quer dizer que em vez de retornar uma função propriamente dita, retornaremos um ponteiro que aponta para uma função e depois utilizaremos o ponteiro como se fosse a função na qual a ponteiro aponta.
+
+A sintaxe para definir uma função que retorna uma outra função é a seguinte :
+
+*tipodeRetorno (\*nomeDaFunçao(parametros,....))(tipo1,tipo2,…){ /*corpo da função */ return funçaoARetornar; }*
+
+Supondo que temos uma função chamada *soma* que recebe dois números inteiros e retorna void :
+```c++
+void soma(int a, int b) { cout<< a + b<<endl; }
+```
+Com a sintaxe vista anteriormente, podemos definir uma função que retorna uma outra. Vamos criar uma função chamada *calculo* que poderá retornar uma função do mesmo tipo que a função *soma* : 
+```c++
+void (*calculo())(int,int)
+{
+  // código extra …
+  return soma; 
+}
+
+int main()
+{
+   // “pf” é um ponteiro que aponta para função retornada pela função “calculo”, que no nosso caso é a função “soma”  
+   auto pf =  calculo();
+
+// implicitamente chama a função “soma”
+pf(2,4);  // imprime   6 
+}
+```
+Suponho que nesta etapa, sintaxes como esta já não deve mais ser uma aberração para ti. Mas vou dar uma pequena explicação na mesma.
+
+Primeiro vamos começar com a definição da função *calculo* : *void (\*calculo())(int,int){  /* código extra...*/  return soma; }*
+
+Para absorver esta sintaxe é preciso ler da seguinte forma. Começamos pelo nome *calculo* olhamos para direita e notamos logo que ele tem um parênteses,isso indica que *calculo* é uma função, e como dentro do parênteses não tem nada, quer dizer que é uma função sem parâmetros. A seguir olhamos para esquerda para ter mais informações, e notamos que têm o asterisco **\***, isto nos diz que a nossa função *caclulo* retorna um ponteiro. Olhando para direita veremos que temos mais parênteses curvos com dois parâmetros do tipo *int*, isso nos diz que se desreferenciarmos o ponteiro retornado pela nossa função *calculo* teremos uma função, e se olharmos mais para à esquerda do **\*** asterisco veremos que a função retornada como ponteiro tem um retorno do tipo *void*. 
+
+Contudo, quer dizer que a função *caclulo* retorna um ponteiro que aponta para uma função que retorna um *void* e que recebe dois argumentos de tipo *int*.
+
+*auto pf =  calculo();*  Afetamos o valor retornado pela função *calculo* para a variável *pf*, como o valor que a função *calculo* retorna é um ponteiro para uma função, então *pf* será automaticamente deduzido como um ponteiro que aponta para uma função, no nosso caso a função é a função *soma*.
+
+Como *pf* aponta na função *soma* então podemos utilizar *pf* como se fosse a nossa função *soma*, exemplo :  *pf(2,4);*
+
+Aqui está, mais uma sintaxe obscura do C++ desvendada.
 
