@@ -616,7 +616,7 @@ Mas, têm sempre uma alternativa, que é através de ponteiros. Não podemos ret
 
 A sintaxe para definir uma função que retorna uma outra função é a seguinte :
 
-*tipodeRetorno (\*nomeDaFunçao(parametros,....))(tipo1,tipo2,…){ /*corpo da função */ return funçaoARetornar; }*
+*tipodeRetorno (\*nomeDaFunçao(parametros,....))(tipo1,tipo2,…){ /\*corpo da função \*/ return funçaoARetornar; }*
 
 Supondo que temos uma função chamada *soma* que recebe dois números inteiros e retorna void :
 ```c++
@@ -641,7 +641,7 @@ pf(2,4);  // imprime   6
 ```
 Suponho que nesta etapa, sintaxes como esta já não deve mais ser uma aberração para ti. Mas vou dar uma pequena explicação na mesma.
 
-Primeiro vamos começar com a definição da função *calculo* : *void (\*calculo())(int,int){  /* código extra...*/  return soma; }*
+Primeiro vamos começar com a definição da função *calculo* : *void (\*calculo())(int,int){  /\* código extra...\*/  return soma; }*
 
 Para absorver esta sintaxe é preciso ler da seguinte forma. Começamos pelo nome *calculo* olhamos para direita e notamos logo que ele tem um parênteses,isso indica que *calculo* é uma função, e como dentro do parênteses não tem nada, quer dizer que é uma função sem parâmetros. A seguir olhamos para esquerda para ter mais informações, e notamos que têm o asterisco **\***, isto nos diz que a nossa função *caclulo* retorna um ponteiro. Olhando para direita veremos que temos mais parênteses curvos com dois parâmetros do tipo *int*, isso nos diz que se desreferenciarmos o ponteiro retornado pela nossa função *calculo* teremos uma função, e se olharmos mais para à esquerda do **\*** asterisco veremos que a função retornada como ponteiro tem um retorno do tipo *void*. 
 
