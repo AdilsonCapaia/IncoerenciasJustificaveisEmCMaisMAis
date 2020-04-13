@@ -557,18 +557,13 @@ O exemplo acima não é um exemplo válido em C++ para definir uma função que 
 O que nos leva na seguinte questão, então qual é a verdadeira sintaxe para declarar/definir uma função que pode retornar um array multidimensional  ?
 
 ### 1.7.2 Forma certa, Justificação/Entendimento do compilador
-Se você leu a seção [1.2.3 Funções que retornam arrays]
-(https://github.com/AdilsonCapaia/IncoerenciasJustificaveisEmCMaisMAis/blob/master/README.md#FRA) você também viu que funções não podem retornar arrays normais, para o fazer foi preciso definir o retorno da função como um ponteiro. O mesmo deve ser feito com uma função que deve retornar arrays multidimensionais, mas com uma particularidade! qual ? Devemos definir o retorno da  função como um ponteiro que aponta para arrays multidimensionais e não como um ponteiro normal.
+Se você leu a seção [1.2.3 Funções que retornam arrays](https://github.com/AdilsonCapaia/IncoerenciasJustificaveisEmCMaisMAis/blob/master/README.md#FRA) você também viu que funções não podem retornar arrays normais, para o fazer foi preciso definir o retorno da função como um ponteiro. O mesmo deve ser feito com uma função que deve retornar arrays multidimensionais, mas com uma particularidade! qual ? Devemos definir o retorno da  função como um ponteiro que aponta para arrays multidimensionais e não como um ponteiro normal.
 
 Se você leu a seção [1.4 Ponteiros que apontam para arrays multidimensionais](https://github.com/AdilsonCapaia/IncoerenciasJustificaveisEmCMaisMAis/blob/master/README.md#PAA) então você já deve ter uma ideia de como definir o retorno da função, mas neste caso é preciso um pouco de cautela.
 
 A sintaxe para definir uma função que retorna um array multidimensional é a seguinte :
 
-*tipoDosElementoNoArray (\*nomeDaFunçao(parametros,....))[numeroDaSegundaDimensao]
-{ 
- //corpo da função 
- return arrayMultidiemensional 
-}*
+*tipoDosElementoNoArray (\*nomeDaFunçao(parametros,....))[numeroDaSegundaDimensao]{ //corpo da função return arrayMultidiemensional }*
 
 Com a sintaxe acima podemos definir nossa função *retornaLista* definida anteriormente desta forma :
 ```c++
