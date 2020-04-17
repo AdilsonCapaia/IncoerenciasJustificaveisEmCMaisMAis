@@ -54,7 +54,7 @@ int (*pArr)[3];      // ponteiro que aponta para um array de tres elementos
 ```
 Baseando-se na sintaxe do **pi**, **pC** e **pAC** podemos deduzir intuitivamente a sintaxe para definir qualquer tipo de ponteiro com o seguinte padrão( pattern) :
 
-**tipoDeDado * nomeDaVarivel ;**
+**tipoDeDado * nomeDaVariavel ;**
 
 Mas, estarias errado se seguisses essa intuiçao/padrão para definir **um ponteiro que aponta para um array**. Tentando imititar O padrão a cima para definir ***intuitivamente*** um **ponteiro que aponta para uma variável de tipo array** poderiamos fazer o seguinte :
 ```c++
@@ -78,7 +78,7 @@ Este Artigo/projecto serve para abordar e facilitar a compreensão destas incoer
 | Termo         | Exemplo       | Outros Significados  |
 | ------------- |:-------------:| :-----|
 | Array         | int aLista[]; | lista, vector |
-| Aariável      | int numero;   | *numero* é nome de uma variável, ou bjeto |
+| Variável      | int numero;   | *numero* é nome de uma variável, ou bjeto |
 | objeto        | Coisa co;     | *co* é um objeto ou instancia, ou ainda nome de uma variavél |
 | Declaração    | int c;        |  *c* foi declarado mas não foi definido|
 | Definição     | int a = 10    | a, foi declarado e definido |
